@@ -1855,19 +1855,19 @@ var Obstacle = function () {
 exports.default = Obstacle;
 
 },{"./../main":15,"gsap":16}],11:[function(require,module,exports){
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
-	value: true
+  value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _gsap = require('gsap');
+var _gsap = require("gsap");
 
 var _gsap2 = _interopRequireDefault(_gsap);
 
-var _main = require('./../main.js');
+var _main = require("./../main.js");
 
 var _main2 = _interopRequireDefault(_main);
 
@@ -1876,162 +1876,162 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Player = function () {
-	function Player() {
-		_classCallCheck(this, Player);
+  function Player() {
+    _classCallCheck(this, Player);
 
-		this.canChange = true;
-		this.image = _main2.default.spriteImage;
+    this.canChange = true;
+    this.image = _main2.default.spriteImage;
 
-		this.width = 96;
-		this.height = 108;
+    this.width = 96;
+    this.height = 108;
 
-		this.baseX = this.x = 30;
-		this.baseY = _main2.default.height - this.height - 108;
-		this.y = this.baseY;
-		this.offsetY = 0;
-		this.sourceWidth = 96;
-		this.sourceHeight = 108;
-		this.baseFrame = this.frame = 1;
-		this.numFrames = 1;
-		this.counter = 0;
-		this.state = null;
+    this.baseX = this.x = 30;
+    this.baseY = _main2.default.height - this.height - 108;
+    this.y = this.baseY;
+    this.offsetY = 0;
+    this.sourceWidth = 96;
+    this.sourceHeight = 108;
+    this.baseFrame = this.frame = 1;
+    this.numFrames = 1;
+    this.counter = 0;
+    this.state = null;
 
-		this.run();
-	}
+    this.run();
+  }
 
-	_createClass(Player, [{
-		key: 'reset',
-		value: function reset() {
-			if (this.delay) {
-				this.delay.kill();
-			}
-			_gsap2.default.killTweensOf(this);
-			// TweenMax.killChildTweensOf(this)
-			this.canChange = true;
-			this.x = this.baseX;
-			this.y = this.baseY;
-		}
-	}, {
-		key: 'dead',
-		value: function dead() {
-			if (this.state !== 'dead') {
-				this.canChange = false;
-				this.speed = 15;
-				this.baseFrame = this.frame = 9;
-				this.numFrames = 4;
-				this.state = 'dead';
-				this.delay = _gsap2.default.to(this, 0.3, {
-					x: this.baseX - 10
-				});
+  _createClass(Player, [{
+    key: "reset",
+    value: function reset() {
+      if (this.delay) {
+        this.delay.kill();
+      }
+      _gsap2.default.killTweensOf(this);
+      // TweenMax.killChildTweensOf(this)
+      this.canChange = true;
+      this.x = this.baseX;
+      this.y = this.baseY;
+    }
+  }, {
+    key: "dead",
+    value: function dead() {
+      if (this.state !== "dead") {
+        this.canChange = false;
+        this.speed = 15;
+        this.baseFrame = this.frame = 9;
+        this.numFrames = 4;
+        this.state = "dead";
+        this.delay = _gsap2.default.to(this, 0.3, {
+          x: this.baseX - 10
+        });
 
-				var that = this;
-				this.delay = _gsap2.default.to(this, 0.15, {
-					y: this.baseY - 10,
-					onComplete: function onComplete() {
-						_gsap2.default.to(that, 0.15, {
-							y: that.baseY
-						});
-						that.y = that.baseY;
-					}
-				});
-			}
-		}
-	}, {
-		key: 'run',
-		value: function run() {
-			if (this.delay) {
-				this.delay.kill();
-			}
-			this.offsetX = 20;
-			this.offsetY = 0;
-			this.speed = 5;
-			this.baseFrame = this.frame = 2;
-			this.numFrames = 1;
-			this.state = 'running';
-		}
-	}, {
-		key: 'jump',
-		value: function jump() {
-			if (this.canChange) {
-				if (this.delay) {
-					this.delay.kill();
-				}
+        var that = this;
+        this.delay = _gsap2.default.to(this, 0.15, {
+          y: this.baseY - 10,
+          onComplete: function onComplete() {
+            _gsap2.default.to(that, 0.15, {
+              y: that.baseY
+            });
+            that.y = that.baseY;
+          }
+        });
+      }
+    }
+  }, {
+    key: "run",
+    value: function run() {
+      if (this.delay) {
+        this.delay.kill();
+      }
+      this.offsetX = 20;
+      this.offsetY = 0;
+      this.speed = 5;
+      this.baseFrame = this.frame = 2;
+      this.numFrames = 1;
+      this.state = "running";
+    }
+  }, {
+    key: "jump",
+    value: function jump() {
+      if (this.canChange) {
+        if (this.delay) {
+          this.delay.kill();
+        }
 
-				this.canChange = false;
-				this.baseFrame = this.frame = 7;
-				this.numFrames = 1;
-				this.speed = 4;
-				this.state = 'jumping';
-				var that = this;
-				this.delay = _gsap2.default.to(that, 1, {
-					y: that.baseY - 240,
-					repeat: 1,
-					yoyo: true,
-					onComplete: function onComplete() {
-						that.run();
-						that.canChange = true;
-					}
-				});
-			}
-		}
-	}, {
-		key: 'duck',
-		value: function duck() {
-			var _this = this;
+        this.canChange = false;
+        this.baseFrame = this.frame = 7;
+        this.numFrames = 1;
+        this.speed = 4;
+        this.state = "jumping";
+        var that = this;
+        this.delay = _gsap2.default.to(that, 0.5, {
+          y: that.baseY - 240,
+          repeat: 1,
+          yoyo: true,
+          onComplete: function onComplete() {
+            that.run();
+            that.canChange = true;
+          }
+        });
+      }
+    }
+  }, {
+    key: "duck",
+    value: function duck() {
+      var _this = this;
 
-			if (this.canChange) {
-				if (this.delay) {
-					this.delay.kill();
-				}
-				if (this.state != 'ducking') {
-					this.baseFrame = this.frame = 5;
-				}
-				this.offsetY = 34;
-				this.numFrames = 1;
-				this.speed = 4;
-				this.state = 'ducking';
-				this.delay = _gsap2.default.delayedCall(1.5, function () {
-					_this.run();
-				});
-			}
-		}
-	}, {
-		key: 'render',
-		value: function render(context) {
-			if (_main2.default.debug) {
-				context.fillStyle = 'rgba(0,255,0,0.1)';
-				context.fillRect(this.x + this.offsetX, this.y + this.offsetY, this.width - this.offsetX, this.height - this.offsetY);
-			}
-			if (this.counter < this.speed) {
-				this.counter += 1;
-			} else {
-				this.counter = 0;
-				if (this.frame < this.baseFrame + this.numFrames) {
-					this.frame += 1;
-				} else {
-					this.frame = this.baseFrame;
-				}
-			}
+      if (this.canChange) {
+        if (this.delay) {
+          this.delay.kill();
+        }
+        if (this.state != "ducking") {
+          this.baseFrame = this.frame = 5;
+        }
+        this.offsetY = 34;
+        this.numFrames = 1;
+        this.speed = 4;
+        this.state = "ducking";
+        this.delay = _gsap2.default.delayedCall(1.5, function () {
+          _this.run();
+        });
+      }
+    }
+  }, {
+    key: "render",
+    value: function render(context) {
+      if (_main2.default.debug) {
+        context.fillStyle = "rgba(0,255,0,0.1)";
+        context.fillRect(this.x + this.offsetX, this.y + this.offsetY, this.width - this.offsetX, this.height - this.offsetY);
+      }
+      if (this.counter < this.speed) {
+        this.counter += 1;
+      } else {
+        this.counter = 0;
+        if (this.frame < this.baseFrame + this.numFrames) {
+          this.frame += 1;
+        } else {
+          this.frame = this.baseFrame;
+        }
+      }
 
-			context.drawImage(this.image, 0, this.sourceHeight * (this.frame - 1), this.sourceWidth, this.sourceHeight, this.x, this.y, this.width, this.height);
-		}
-	}, {
-		key: 'pause',
-		value: function pause() {
-			if (this.delay) {
-				this.delay.pause();
-			}
-		}
-	}, {
-		key: 'resume',
-		value: function resume() {
-			if (this.delay) {
-				this.delay.resume();
-			}
-		}
-	}]);
+      context.drawImage(this.image, 0, this.sourceHeight * (this.frame - 1), this.sourceWidth, this.sourceHeight, this.x, this.y, this.width, this.height);
+    }
+  }, {
+    key: "pause",
+    value: function pause() {
+      if (this.delay) {
+        this.delay.pause();
+      }
+    }
+  }, {
+    key: "resume",
+    value: function resume() {
+      if (this.delay) {
+        this.delay.resume();
+      }
+    }
+  }]);
 
-	return Player;
+  return Player;
 }();
 
 exports.default = Player;
