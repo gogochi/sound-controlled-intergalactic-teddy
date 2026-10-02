@@ -1,6 +1,14 @@
 import Meyda from "meyda";
 import KNN from "./KNN";
 import Q from "./../main";
+import {
+  snapshotFileName,
+  isSnapshotKey,
+  saveCanvasSnapshot,
+} from "./spectrumSnapshot";
+
+const SNAPSHOT_LABEL = "Save spectrum (S)";
+const SNAPSHOT_STATUS_MS = 1200;
 
 class AudioClassifier {
   constructor(config) {
@@ -86,7 +94,28 @@ class AudioClassifier {
         // Q.GAME.unpause()
         Q.GAME.reset(false);
       }
+    } else if (!this.hidden && isSnapshotKey(event)) {
+      event.preventDefault();
+      this.saveSpectrum();
     }
+  }
+
+  saveSpectrum() {
+    saveCanvasSnapshot(this.canvas, snapshotFileName(new Date()))
+      .then(() => this.showSnapshotStatus("Saved!"))
+      .catch((error) => {
+        console.error(error);
+        this.showSnapshotStatus("Save failed");
+      });
+  }
+
+  showSnapshotStatus(text) {
+    let button = document.querySelector("#snapshot");
+    button.textContent = text;
+    clearTimeout(this.snapshotTimer);
+    this.snapshotTimer = setTimeout(() => {
+      button.textContent = SNAPSHOT_LABEL;
+    }, SNAPSHOT_STATUS_MS);
   }
 
   resize() {
@@ -289,6 +318,10 @@ class AudioClassifier {
     document
       .querySelector("#load")
       .addEventListener("click", this.loadDataSet.bind(this));
+    document.querySelector("#snapshot").textContent = SNAPSHOT_LABEL;
+    document
+      .querySelector("#snapshot")
+      .addEventListener("click", this.saveSpectrum.bind(this));
     document.querySelector("#change-k").textContent =
       "Change K: " + this.knn.topK;
     document

@@ -39,6 +39,9 @@ To open the training interface simply hit `Shift + TAB` on your keyboard.
 In the training interface you can load, save and reset training data. You can also control the threshold for how sensitive the microphone should be. if you are attempting to record some new training examples, but find that nothing happens, it could be because the `threshold` is too high. Click `Change Threshold` and set it to a lower number and try again. If the sound is loud enough the sound bars on the right will turn blue.
 
 
+### Spectrum snapshot
+While the training interface is open, press `S` (or click `Save spectrum (S)`) to download the current sound spectrum as a PNG, named with the date and time, e.g. `spectrum-20261002-103512.png`.
+
 ### Training
 You can clear all training data by clicking `Clear All`. 
 
