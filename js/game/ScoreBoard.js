@@ -4,18 +4,11 @@ import Number from './Number'
 
 class ScoreBoard {
 	constructor() {
-		this.image = Q.spriteImage
-
 		this.width = 100
 		this.height = 52
 
 		this.x = 14
 		this.y = Q.height - this.height - 40
-
-		this.sourceX = 116
-		this.sourceY = 1444
-		this.sourceWidth = 100
-		this.sourceHeight = 52
 
 		this.value = null
 		this.numbers = []
@@ -61,7 +54,7 @@ class ScoreBoard {
 	} 
 
 	render(context) {
-		context.drawImage(this.image, this.sourceX, this.sourceY, this.sourceWidth, this.sourceHeight, this.x, this.y, this.width, this.height)
+		Q.skin.draw(context, 'score-board', 0, this.x, this.y, this.width, this.height)
 
 		this.numbers.forEach((number) => {
 			number.render(context)

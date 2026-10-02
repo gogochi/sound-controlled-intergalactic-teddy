@@ -4,7 +4,6 @@ import Q from "./../main.js";
 class Player {
   constructor() {
     this.canChange = true;
-    this.image = Q.spriteImage;
 
     this.width = 96;
     this.height = 108;
@@ -13,14 +12,19 @@ class Player {
     this.baseY = Q.height - this.height - 108;
     this.y = this.baseY;
     this.offsetY = 0;
-    this.sourceWidth = 96;
-    this.sourceHeight = 108;
-    this.baseFrame = this.frame = 1;
+    this.animation = null;
+    this.frame = 0;
     this.numFrames = 1;
     this.counter = 0;
     this.state = null;
 
     this.run();
+  }
+
+  setAnimation(name) {
+    this.animation = name;
+    this.frame = 0;
+    this.numFrames = Q.skin.frameCount(name);
   }
 
   reset() {
@@ -38,8 +42,7 @@ class Player {
     if (this.state !== "dead") {
       this.canChange = false;
       this.speed = 15;
-      this.baseFrame = this.frame = 9;
-      this.numFrames = 4;
+      this.setAnimation("player-dead");
       this.state = "dead";
       this.delay = TweenMax.to(this, 0.3, {
         x: this.baseX - 10,
@@ -65,8 +68,7 @@ class Player {
     this.offsetX = 20;
     this.offsetY = 0;
     this.speed = 5;
-    this.baseFrame = this.frame = 2;
-    this.numFrames = 1;
+    this.setAnimation("player-run");
     this.state = "running";
   }
 
@@ -77,8 +79,7 @@ class Player {
       }
 
       this.canChange = false;
-      this.baseFrame = this.frame = 7;
-      this.numFrames = 1;
+      this.setAnimation("player-jump");
       this.speed = 4;
       this.state = "jumping";
       let that = this;
@@ -100,10 +101,9 @@ class Player {
         this.delay.kill();
       }
       if (this.state != "ducking") {
-        this.baseFrame = this.frame = 5;
+        this.setAnimation("player-duck");
       }
       this.offsetY = 34;
-      this.numFrames = 1;
       this.speed = 4;
       this.state = "ducking";
       this.delay = TweenMax.delayedCall(1.5, () => {
@@ -126,19 +126,13 @@ class Player {
       this.counter += 1;
     } else {
       this.counter = 0;
-      if (this.frame < this.baseFrame + this.numFrames) {
-        this.frame += 1;
-      } else {
-        this.frame = this.baseFrame;
-      }
+      this.frame = (this.frame + 1) % this.numFrames;
     }
 
-    context.drawImage(
-      this.image,
-      0,
-      this.sourceHeight * (this.frame - 1),
-      this.sourceWidth,
-      this.sourceHeight,
+    Q.skin.draw(
+      context,
+      this.animation,
+      this.frame,
       this.x,
       this.y,
       this.width,

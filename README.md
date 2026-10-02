@@ -47,6 +47,11 @@ Now say you want to train the sound that should trigger a jump. Click and hold d
 
 
 
+## Changing the art
+All game images live as separate files in `assets/skin-original/`. To replace one, drop an image with the same name into `assets/skin/` — no code changes needed. Missing parts fall back to the originals. See `assets/skin/_說明.md` and `assets/skin/_對照圖.png` for the full list of names.
+
+Run the unit tests with `npm test` (requires Node.js 22 or newer).
+
 ## License
 
 The MIT License (MIT)

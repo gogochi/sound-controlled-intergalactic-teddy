@@ -17,7 +17,7 @@
     ]
   },
   "scripts": {
-    "build": "npm run html-copy && npm run style-build && npm run assets-copy && npm run browserify",
+    "build": "npm run html-copy && npm run style-build && npm run assets-copy && npm run skin-index && npm run browserify",
     "browserify": "browserify js/main.js -o public/bundle.js",
     "assets-copy": "cpx \"assets/**/*\" \"public/assets/\" --clean",
     "assets-watch": "npm run assets-copy -- --watch",
@@ -28,7 +28,10 @@
     "eslint": "eslint src",
     "stylint": "stylint style",
     "budo": "budo js/main.js:bundle.js --port=3000 --live -v --dir=public -o",
-    "watch": "npm run style-build && concurrently \"npm run assets-watch\" \"npm run html-watch\" \"npm run budo\" \"npm run style-watch\""
+    "watch": "npm run style-build && concurrently \"npm run assets-watch\" \"npm run html-watch\" \"npm run skin-watch\" \"npm run budo\" \"npm run style-watch\"",
+    "test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test \"test/**/*.test.mjs\"",
+    "skin-index": "node scripts/skin-index.js",
+    "skin-watch": "node scripts/skin-index.js --watch"
   },
   "pre-commit": [
     "eslint",

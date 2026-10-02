@@ -3,17 +3,12 @@ import Q from './../main.js'
 import Obstacle from './Obstacle'
 
 class Section {
-	constructor(x, noMonsters) {
-		this.image = Q.spriteImage
+	constructor(x, noMonsters, flipped = false) {
 		this.x = x
 		this.y = Q.height - 108
 		this.width = 1400
 		this.height = 196
-
-		this.sourceX = 428
-		this.sourceY = 0
-		this.sourceWidth = 1400
-		this.sourceHeight = 196
+		this.flipped = flipped
 
 		this.obstacles = []
 
@@ -44,7 +39,7 @@ class Section {
 	}
 
 	render(context) {
-		context.drawImage(this.image, this.sourceX, this.sourceY, this.sourceWidth, this.sourceHeight, this.x, this.y, this.width, this.height)
+		Q.skin.draw(context, 'bg-ground', 0, this.x, this.y, this.width, this.height, this.flipped)
 
 		this.obstacles.forEach((obstacle) => {
 			obstacle.x -= Q.speed

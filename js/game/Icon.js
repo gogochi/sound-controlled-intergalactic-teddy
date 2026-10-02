@@ -4,8 +4,8 @@ import Q from './../main'
 class Icon {
 	constructor(type) {
 		this.counter = 0
-		this.image = Q.spriteImage
 		this.type = type
+		this.part = type === 'clap' ? 'hint-clap' : 'hint-say'
 
 		this.canChange = true
 
@@ -14,10 +14,6 @@ class Icon {
 			this.height = 204
 			this.x = 250
 			this.y = 200
-			this.sourceX = 1396
-			this.sourceY = 1754
-			this.sourceWidth = 144
-			this.sourceHeight = 204
 
 			this.frame = 0
 			this.numFrames = 2
@@ -30,10 +26,6 @@ class Icon {
 			this.height = 148
 			this.x = 250
 			this.y = 250
-			this.sourceX = 931
-			this.sourceY = 1812
-			this.sourceWidth = 155
-			this.sourceHeight = 148
 
 			this.frame = 0
 			this.numFrames = 2
@@ -48,7 +40,7 @@ class Icon {
 		}
 
 		
-		context.drawImage(this.image, this.sourceX + (this.sourceWidth * this.frame), this.sourceY, this.sourceWidth, this.sourceHeight, this.x, this.y, this.width, this.height)
+		Q.skin.draw(context, this.part, this.frame, this.x, this.y, this.width, this.height)
 
 		if (this.canChange) {
 			if (this.counter < this.speed) {

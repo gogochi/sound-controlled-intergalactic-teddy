@@ -1,6 +1,5 @@
 import Q from "./../main";
 import Player from "./Player";
-import Moon from "./Moon";
 import Backdrop from "./Backdrop";
 import Mountain from "./Mountain";
 import Section from "./Section";
@@ -337,7 +336,9 @@ class Game {
       backdrop.render(this.context);
 
       if (backdrop.x + backdrop.width < Q.width && this.backdrops.length < 2) {
-        this.backdrops.push(new Backdrop(backdrop.x + backdrop.width - 0.5));
+        this.backdrops.push(
+          new Backdrop(backdrop.x + backdrop.width - 0.5, !backdrop.flipped)
+        );
       } else if (backdrop.x + backdrop.width < 0) {
         removeBackdrop = true;
       }
@@ -356,7 +357,7 @@ class Game {
       this.mountainsBack.length === 1 &&
       this.mountainsBack[0].x + this.mountainsBack[0].width < Q.width
     ) {
-      let mountain = new Mountain(0);
+      let mountain = new Mountain(0, !this.mountainsBack[0].flipped);
       mountain.x = this.mountainsBack[0].x + this.mountainsBack[0].width - 0.5;
       this.mountainsBack.push(mountain);
     }
@@ -374,7 +375,7 @@ class Game {
       this.mountainsMiddle.length === 1 &&
       this.mountainsMiddle[0].x + this.mountainsMiddle[0].width < Q.width
     ) {
-      let mountain = new Mountain(1);
+      let mountain = new Mountain(1, !this.mountainsMiddle[0].flipped);
       mountain.x =
         this.mountainsMiddle[0].x + this.mountainsMiddle[0].width - 0.5;
       this.mountainsMiddle.push(mountain);
@@ -393,7 +394,7 @@ class Game {
       this.mountainsFront.length === 1 &&
       this.mountainsFront[0].x + this.mountainsFront[0].width < Q.width
     ) {
-      let mountain = new Mountain(2);
+      let mountain = new Mountain(2, !this.mountainsFront[0].flipped);
       mountain.x =
         this.mountainsFront[0].x + this.mountainsFront[0].width - 0.5;
       this.mountainsFront.push(mountain);
@@ -410,7 +411,11 @@ class Game {
 
       if (section.x + section.width < Q.width && this.sections.length < 2) {
         this.sections.push(
-          new Section(section.x + section.width - Q.speed, Q.isIntro)
+          new Section(
+            section.x + section.width - Q.speed,
+            Q.isIntro,
+            !section.flipped
+          )
         );
       } else if (section.x + section.width < 0) {
         removeSection = true;

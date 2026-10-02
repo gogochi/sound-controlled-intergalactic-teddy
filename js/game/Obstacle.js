@@ -1,12 +1,14 @@
 import TweenMax from 'gsap'
 import Q from './../main'
 
+const OBSTACLE_PARTS = ['ground-slime', 'air-saucer', 'ground-snake-pink', 'ground-snake-yellow', 'air-dragon']
+
 class Obstacle {
 	constructor(index, x) {
 		this.counter = 0
-		this.image = Q.spriteImage
 		this.type = index
-		this.mask = Q.masks[index]
+		this.part = OBSTACLE_PARTS[index]
+		this.mask = Q.skin.mask(this.part)
 
 		if (index === 0) {
 			// Slime monster
@@ -14,10 +16,6 @@ class Obstacle {
 			this.height = 72
 			this.x = x
 			this.y = Q.height - 110 - this.height
-			this.sourceX = 116
-			this.sourceY = 394
-			this.sourceWidth = 156
-			this.sourceHeight = 72
 
 			this.frame = 0
 			this.numFrames = 3
@@ -31,10 +29,6 @@ class Obstacle {
 			this.height = 116
 			this.x = x
 			this.y = Q.height - 190 - this.height
-			this.sourceX = 116
-			this.sourceY = 724
-			this.sourceWidth = 168
-			this.sourceHeight = 116
 
 			this.frame = 0
 			this.numFrames = 2
@@ -49,10 +43,6 @@ class Obstacle {
 			this.height = 80
 			this.x = x
 			this.y = Q.height - 100 - this.height
-			this.sourceX = 116
-			this.sourceY = 1082
-			this.sourceWidth = 104
-			this.sourceHeight = 80
 
 			this.frame = 0
 			this.numFrames = 1
@@ -66,10 +56,6 @@ class Obstacle {
 			this.height = 80
 			this.x = x
 			this.y = Q.height - 100 - this.height
-			this.sourceX = 116
-			this.sourceY = 1252
-			this.sourceWidth = 104
-			this.sourceHeight = 80
 
 			this.frame = 1
 			this.numFrames = 1
@@ -84,10 +70,6 @@ class Obstacle {
 			this.height = 192
 			this.x = x
 			this.y = Q.height - 190 - this.height
-			this.sourceX = 116
-			this.sourceY = 0
-			this.sourceWidth = 188
-			this.sourceHeight = 192
 
 			this.frame = 0
 			this.numFrames = 1
@@ -194,7 +176,7 @@ class Obstacle {
 		}
 
 		
-		context.drawImage(this.image, this.sourceX, this.sourceY + (this.sourceHeight * this.frame), this.sourceWidth, this.sourceHeight, this.x, this.y, this.width, this.height)
+		Q.skin.draw(context, this.part, this.frame, this.x, this.y, this.width, this.height)
 
 		let test = this.intersectRect({
 			left: this.x,

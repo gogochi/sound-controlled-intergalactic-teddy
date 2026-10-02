@@ -2,7 +2,6 @@ import Q from './../main.js'
 
 class Number {
 	constructor() {
-		this.image = Q.spriteImage
 		this.value = null
 
 		this.width = 20
@@ -10,11 +9,6 @@ class Number {
 
 		this.x = 0
 		this.y = 0
-
-		this.sourceX = 116
-		this.sourceY = 1500
-		this.sourceWidth = 20
-		this.sourceHeight = 28
 	}
 
 	set(value) {
@@ -26,7 +20,8 @@ class Number {
 	}
 
 	render(context) {
-		context.drawImage(this.image, this.sourceX + (this.sourceWidth * (this.value)), this.sourceY, this.sourceWidth, this.sourceHeight, this.x, this.y, this.width, this.height)
+		// value 為 'x' 時代表前面補空白，score-x 不存在所以不會畫
+		Q.skin.draw(context, `score-${this.value}`, 0, this.x, this.y, this.width, this.height)
 	}
 }
 

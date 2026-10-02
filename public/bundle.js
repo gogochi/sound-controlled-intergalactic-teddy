@@ -512,7 +512,7 @@ var AudioClassifier = function () {
 
 exports.default = AudioClassifier;
 
-},{"./../main":15,"./KNN":2,"meyda":17}],2:[function(require,module,exports){
+},{"./../main":14,"./KNN":2,"meyda":22}],2:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -664,24 +664,21 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var Backdrop = function () {
 	function Backdrop(x) {
+		var flipped = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
 		_classCallCheck(this, Backdrop);
 
-		this.image = _main2.default.spriteImage;
 		this.x = x;
 		this.y = 0;
 		this.width = 1400;
 		this.height = 572;
-
-		this.sourceX = 428;
-		this.sourceY = 196;
-		this.sourceWidth = 1400;
-		this.sourceHeight = 572;
+		this.flipped = flipped;
 	}
 
 	_createClass(Backdrop, [{
 		key: 'render',
 		value: function render(context) {
-			context.drawImage(this.image, this.sourceX, this.sourceY, this.sourceWidth, this.sourceHeight, this.x, this.y, this.width, this.height);
+			_main2.default.skin.draw(context, 'bg-sky', 0, this.x, this.y, this.width, this.height, this.flipped);
 		}
 	}]);
 
@@ -690,7 +687,7 @@ var Backdrop = function () {
 
 exports.default = Backdrop;
 
-},{"./../main.js":15,"gsap":16}],4:[function(require,module,exports){
+},{"./../main.js":14,"gsap":21}],4:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -711,7 +708,6 @@ var BigNumber = function () {
 	function BigNumber() {
 		_classCallCheck(this, BigNumber);
 
-		this.image = _main2.default.spriteImage;
 		this.value = null;
 
 		this.width = 80;
@@ -719,11 +715,6 @@ var BigNumber = function () {
 
 		this.x = 0;
 		this.y = 0;
-
-		this.sourceX = 630;
-		this.sourceY = 1980;
-		this.sourceWidth = 80;
-		this.sourceHeight = 116;
 		this.show = true;
 	}
 
@@ -743,7 +734,7 @@ var BigNumber = function () {
 		key: 'render',
 		value: function render(context) {
 			if (this.show) {
-				context.drawImage(this.image, this.sourceX + this.sourceWidth * this.value, this.sourceY, this.sourceWidth, this.sourceHeight, this.x, this.y, this.width, this.height);
+				_main2.default.skin.draw(context, 'countdown-' + this.value, 0, this.x, this.y, this.width, this.height);
 			}
 		}
 	}]);
@@ -753,7 +744,7 @@ var BigNumber = function () {
 
 exports.default = BigNumber;
 
-},{"./../main.js":15}],5:[function(require,module,exports){
+},{"./../main.js":14}],5:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -769,10 +760,6 @@ var _main2 = _interopRequireDefault(_main);
 var _Player = require("./Player");
 
 var _Player2 = _interopRequireDefault(_Player);
-
-var _Moon = require("./Moon");
-
-var _Moon2 = _interopRequireDefault(_Moon);
 
 var _Backdrop = require("./Backdrop");
 
@@ -1156,7 +1143,7 @@ var Game = function () {
         backdrop.render(_this.context);
 
         if (backdrop.x + backdrop.width < _main2.default.width && _this.backdrops.length < 2) {
-          _this.backdrops.push(new _Backdrop2.default(backdrop.x + backdrop.width - 0.5));
+          _this.backdrops.push(new _Backdrop2.default(backdrop.x + backdrop.width - 0.5, !backdrop.flipped));
         } else if (backdrop.x + backdrop.width < 0) {
           removeBackdrop = true;
         }
@@ -1172,7 +1159,7 @@ var Game = function () {
       });
 
       if (this.mountainsBack.length === 1 && this.mountainsBack[0].x + this.mountainsBack[0].width < _main2.default.width) {
-        var mountain = new _Mountain2.default(0);
+        var mountain = new _Mountain2.default(0, !this.mountainsBack[0].flipped);
         mountain.x = this.mountainsBack[0].x + this.mountainsBack[0].width - 0.5;
         this.mountainsBack.push(mountain);
       }
@@ -1187,7 +1174,7 @@ var Game = function () {
       });
 
       if (this.mountainsMiddle.length === 1 && this.mountainsMiddle[0].x + this.mountainsMiddle[0].width < _main2.default.width) {
-        var _mountain = new _Mountain2.default(1);
+        var _mountain = new _Mountain2.default(1, !this.mountainsMiddle[0].flipped);
         _mountain.x = this.mountainsMiddle[0].x + this.mountainsMiddle[0].width - 0.5;
         this.mountainsMiddle.push(_mountain);
       }
@@ -1202,7 +1189,7 @@ var Game = function () {
       });
 
       if (this.mountainsFront.length === 1 && this.mountainsFront[0].x + this.mountainsFront[0].width < _main2.default.width) {
-        var _mountain2 = new _Mountain2.default(2);
+        var _mountain2 = new _Mountain2.default(2, !this.mountainsFront[0].flipped);
         _mountain2.x = this.mountainsFront[0].x + this.mountainsFront[0].width - 0.5;
         this.mountainsFront.push(_mountain2);
       }
@@ -1217,7 +1204,7 @@ var Game = function () {
         section.render(_this.context);
 
         if (section.x + section.width < _main2.default.width && _this.sections.length < 2) {
-          _this.sections.push(new _Section2.default(section.x + section.width - _main2.default.speed, _main2.default.isIntro));
+          _this.sections.push(new _Section2.default(section.x + section.width - _main2.default.speed, _main2.default.isIntro, !section.flipped));
         } else if (section.x + section.width < 0) {
           removeSection = true;
         }
@@ -1296,7 +1283,7 @@ var Game = function () {
 
 exports.default = Game;
 
-},{"./../ai/AudioClassifier":1,"./../main":15,"./Backdrop":3,"./BigNumber":4,"./Icon":6,"./Moon":7,"./Mountain":8,"./Player":11,"./ScoreBoard":12,"./Section":13,"./Title":14}],6:[function(require,module,exports){
+},{"./../ai/AudioClassifier":1,"./../main":14,"./Backdrop":3,"./BigNumber":4,"./Icon":6,"./Mountain":7,"./Player":10,"./ScoreBoard":11,"./Section":12,"./Title":13}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1322,8 +1309,8 @@ var Icon = function () {
 		_classCallCheck(this, Icon);
 
 		this.counter = 0;
-		this.image = _main2.default.spriteImage;
 		this.type = type;
+		this.part = type === 'clap' ? 'hint-clap' : 'hint-say';
 
 		this.canChange = true;
 
@@ -1332,10 +1319,6 @@ var Icon = function () {
 			this.height = 204;
 			this.x = 250;
 			this.y = 200;
-			this.sourceX = 1396;
-			this.sourceY = 1754;
-			this.sourceWidth = 144;
-			this.sourceHeight = 204;
 
 			this.frame = 0;
 			this.numFrames = 2;
@@ -1347,10 +1330,6 @@ var Icon = function () {
 			this.height = 148;
 			this.x = 250;
 			this.y = 250;
-			this.sourceX = 931;
-			this.sourceY = 1812;
-			this.sourceWidth = 155;
-			this.sourceHeight = 148;
 
 			this.frame = 0;
 			this.numFrames = 2;
@@ -1368,7 +1347,7 @@ var Icon = function () {
 				context.fillRect(this.x, this.y, this.width, this.height);
 			}
 
-			context.drawImage(this.image, this.sourceX + this.sourceWidth * this.frame, this.sourceY, this.sourceWidth, this.sourceHeight, this.x, this.y, this.width, this.height);
+			_main2.default.skin.draw(context, this.part, this.frame, this.x, this.y, this.width, this.height);
 
 			if (this.canChange) {
 				if (this.counter < this.speed) {
@@ -1422,7 +1401,7 @@ var Icon = function () {
 
 exports.default = Icon;
 
-},{"./../main":15,"gsap":16}],7:[function(require,module,exports){
+},{"./../main":14,"gsap":21}],7:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1443,96 +1422,39 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Moon = function () {
-	function Moon() {
-		_classCallCheck(this, Moon);
-
-		this.image = _main2.default.spriteImage;
-		this.x = 10;
-		this.y = 10;
-		this.width = 90;
-		this.height = 90;
-
-		this.sourceX = 100;
-		this.sourceY = 200;
-		this.sourceWidth = 90;
-		this.sourceHeight = 90;
-	}
-
-	_createClass(Moon, [{
-		key: 'render',
-		value: function render(context) {
-
-			context.drawImage(this.image, this.sourceX, this.sourceY, this.sourceWidth, this.sourceHeight, this.x, this.y, this.width, this.height);
-		}
-	}]);
-
-	return Moon;
-}();
-
-exports.default = Moon;
-
-},{"./../main.js":15,"gsap":16}],8:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _gsap = require('gsap');
-
-var _gsap2 = _interopRequireDefault(_gsap);
-
-var _main = require('./../main.js');
-
-var _main2 = _interopRequireDefault(_main);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var MOUNTAIN_PARTS = ['bg-mountain-far', 'bg-mountain-mid', 'bg-mountain-near'];
 
 var Mountain = function () {
 	function Mountain(index) {
+		var flipped = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
 		_classCallCheck(this, Mountain);
 
-		this.image = _main2.default.spriteImage;
+		this.part = MOUNTAIN_PARTS[index];
+		this.flipped = flipped;
 
 		if (index === 0) {
 			this.x = 0;
 			this.y = 60;
 			this.width = 1400;
 			this.height = 453;
-			this.sourceX = 428;
-			this.sourceY = 768;
-			this.sourceWidth = 1400;
-			this.sourceHeight = 453;
 		} else if (index === 1) {
 			this.x = 0;
 			this.y = 200;
 			this.width = 1400;
 			this.height = 342;
-			this.sourceX = 428;
-			this.sourceY = 1220;
-			this.sourceWidth = 1400;
-			this.sourceHeight = 342;
 		} else if (index === 2) {
 			this.x = 0;
 			this.y = 368;
 			this.width = 1400;
 			this.height = 100;
-			this.sourceX = 428;
-			this.sourceY = 1560;
-			this.sourceWidth = 1400;
-			this.sourceHeight = 100;
 		}
 	}
 
 	_createClass(Mountain, [{
 		key: 'render',
 		value: function render(context) {
-			context.drawImage(this.image, this.sourceX, this.sourceY, this.sourceWidth, this.sourceHeight, this.x, this.y, this.width, this.height);
+			_main2.default.skin.draw(context, this.part, 0, this.x, this.y, this.width, this.height, this.flipped);
 		}
 	}]);
 
@@ -1541,7 +1463,7 @@ var Mountain = function () {
 
 exports.default = Mountain;
 
-},{"./../main.js":15,"gsap":16}],9:[function(require,module,exports){
+},{"./../main.js":14,"gsap":21}],8:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1562,7 +1484,6 @@ var Number = function () {
 	function Number() {
 		_classCallCheck(this, Number);
 
-		this.image = _main2.default.spriteImage;
 		this.value = null;
 
 		this.width = 20;
@@ -1570,11 +1491,6 @@ var Number = function () {
 
 		this.x = 0;
 		this.y = 0;
-
-		this.sourceX = 116;
-		this.sourceY = 1500;
-		this.sourceWidth = 20;
-		this.sourceHeight = 28;
 	}
 
 	_createClass(Number, [{
@@ -1590,7 +1506,8 @@ var Number = function () {
 	}, {
 		key: 'render',
 		value: function render(context) {
-			context.drawImage(this.image, this.sourceX + this.sourceWidth * this.value, this.sourceY, this.sourceWidth, this.sourceHeight, this.x, this.y, this.width, this.height);
+			// value 為 'x' 時代表前面補空白，score-x 不存在所以不會畫
+			_main2.default.skin.draw(context, 'score-' + this.value, 0, this.x, this.y, this.width, this.height);
 		}
 	}]);
 
@@ -1599,7 +1516,7 @@ var Number = function () {
 
 exports.default = Number;
 
-},{"./../main.js":15}],10:[function(require,module,exports){
+},{"./../main.js":14}],9:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1620,14 +1537,16 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var OBSTACLE_PARTS = ['ground-slime', 'air-saucer', 'ground-snake-pink', 'ground-snake-yellow', 'air-dragon'];
+
 var Obstacle = function () {
 	function Obstacle(index, x) {
 		_classCallCheck(this, Obstacle);
 
 		this.counter = 0;
-		this.image = _main2.default.spriteImage;
 		this.type = index;
-		this.mask = _main2.default.masks[index];
+		this.part = OBSTACLE_PARTS[index];
+		this.mask = _main2.default.skin.mask(this.part);
 
 		if (index === 0) {
 			// Slime monster
@@ -1635,10 +1554,6 @@ var Obstacle = function () {
 			this.height = 72;
 			this.x = x;
 			this.y = _main2.default.height - 110 - this.height;
-			this.sourceX = 116;
-			this.sourceY = 394;
-			this.sourceWidth = 156;
-			this.sourceHeight = 72;
 
 			this.frame = 0;
 			this.numFrames = 3;
@@ -1651,10 +1566,6 @@ var Obstacle = function () {
 			this.height = 116;
 			this.x = x;
 			this.y = _main2.default.height - 190 - this.height;
-			this.sourceX = 116;
-			this.sourceY = 724;
-			this.sourceWidth = 168;
-			this.sourceHeight = 116;
 
 			this.frame = 0;
 			this.numFrames = 2;
@@ -1667,10 +1578,6 @@ var Obstacle = function () {
 			this.height = 80;
 			this.x = x;
 			this.y = _main2.default.height - 100 - this.height;
-			this.sourceX = 116;
-			this.sourceY = 1082;
-			this.sourceWidth = 104;
-			this.sourceHeight = 80;
 
 			this.frame = 0;
 			this.numFrames = 1;
@@ -1683,10 +1590,6 @@ var Obstacle = function () {
 			this.height = 80;
 			this.x = x;
 			this.y = _main2.default.height - 100 - this.height;
-			this.sourceX = 116;
-			this.sourceY = 1252;
-			this.sourceWidth = 104;
-			this.sourceHeight = 80;
 
 			this.frame = 1;
 			this.numFrames = 1;
@@ -1699,10 +1602,6 @@ var Obstacle = function () {
 			this.height = 192;
 			this.x = x;
 			this.y = _main2.default.height - 190 - this.height;
-			this.sourceX = 116;
-			this.sourceY = 0;
-			this.sourceWidth = 188;
-			this.sourceHeight = 192;
 
 			this.frame = 0;
 			this.numFrames = 1;
@@ -1808,7 +1707,7 @@ var Obstacle = function () {
 				context.fillRect(this.x, this.y, this.width, this.height);
 			}
 
-			context.drawImage(this.image, this.sourceX, this.sourceY + this.sourceHeight * this.frame, this.sourceWidth, this.sourceHeight, this.x, this.y, this.width, this.height);
+			_main2.default.skin.draw(context, this.part, this.frame, this.x, this.y, this.width, this.height);
 
 			var test = this.intersectRect({
 				left: this.x,
@@ -1854,7 +1753,7 @@ var Obstacle = function () {
 
 exports.default = Obstacle;
 
-},{"./../main":15,"gsap":16}],11:[function(require,module,exports){
+},{"./../main":14,"gsap":21}],10:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1880,7 +1779,6 @@ var Player = function () {
     _classCallCheck(this, Player);
 
     this.canChange = true;
-    this.image = _main2.default.spriteImage;
 
     this.width = 96;
     this.height = 108;
@@ -1889,9 +1787,8 @@ var Player = function () {
     this.baseY = _main2.default.height - this.height - 108;
     this.y = this.baseY;
     this.offsetY = 0;
-    this.sourceWidth = 96;
-    this.sourceHeight = 108;
-    this.baseFrame = this.frame = 1;
+    this.animation = null;
+    this.frame = 0;
     this.numFrames = 1;
     this.counter = 0;
     this.state = null;
@@ -1900,6 +1797,13 @@ var Player = function () {
   }
 
   _createClass(Player, [{
+    key: "setAnimation",
+    value: function setAnimation(name) {
+      this.animation = name;
+      this.frame = 0;
+      this.numFrames = _main2.default.skin.frameCount(name);
+    }
+  }, {
     key: "reset",
     value: function reset() {
       if (this.delay) {
@@ -1917,8 +1821,7 @@ var Player = function () {
       if (this.state !== "dead") {
         this.canChange = false;
         this.speed = 15;
-        this.baseFrame = this.frame = 9;
-        this.numFrames = 4;
+        this.setAnimation("player-dead");
         this.state = "dead";
         this.delay = _gsap2.default.to(this, 0.3, {
           x: this.baseX - 10
@@ -1945,8 +1848,7 @@ var Player = function () {
       this.offsetX = 20;
       this.offsetY = 0;
       this.speed = 5;
-      this.baseFrame = this.frame = 2;
-      this.numFrames = 1;
+      this.setAnimation("player-run");
       this.state = "running";
     }
   }, {
@@ -1958,8 +1860,7 @@ var Player = function () {
         }
 
         this.canChange = false;
-        this.baseFrame = this.frame = 7;
-        this.numFrames = 1;
+        this.setAnimation("player-jump");
         this.speed = 4;
         this.state = "jumping";
         var that = this;
@@ -1984,10 +1885,9 @@ var Player = function () {
           this.delay.kill();
         }
         if (this.state != "ducking") {
-          this.baseFrame = this.frame = 5;
+          this.setAnimation("player-duck");
         }
         this.offsetY = 34;
-        this.numFrames = 1;
         this.speed = 4;
         this.state = "ducking";
         this.delay = _gsap2.default.delayedCall(1.5, function () {
@@ -2006,14 +1906,10 @@ var Player = function () {
         this.counter += 1;
       } else {
         this.counter = 0;
-        if (this.frame < this.baseFrame + this.numFrames) {
-          this.frame += 1;
-        } else {
-          this.frame = this.baseFrame;
-        }
+        this.frame = (this.frame + 1) % this.numFrames;
       }
 
-      context.drawImage(this.image, 0, this.sourceHeight * (this.frame - 1), this.sourceWidth, this.sourceHeight, this.x, this.y, this.width, this.height);
+      _main2.default.skin.draw(context, this.animation, this.frame, this.x, this.y, this.width, this.height);
     }
   }, {
     key: "pause",
@@ -2036,7 +1932,7 @@ var Player = function () {
 
 exports.default = Player;
 
-},{"./../main.js":15,"gsap":16}],12:[function(require,module,exports){
+},{"./../main.js":14,"gsap":21}],11:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2061,18 +1957,11 @@ var ScoreBoard = function () {
 	function ScoreBoard() {
 		_classCallCheck(this, ScoreBoard);
 
-		this.image = _main2.default.spriteImage;
-
 		this.width = 100;
 		this.height = 52;
 
 		this.x = 14;
 		this.y = _main2.default.height - this.height - 40;
-
-		this.sourceX = 116;
-		this.sourceY = 1444;
-		this.sourceWidth = 100;
-		this.sourceHeight = 52;
 
 		this.value = null;
 		this.numbers = [];
@@ -2121,7 +2010,7 @@ var ScoreBoard = function () {
 	}, {
 		key: 'render',
 		value: function render(context) {
-			context.drawImage(this.image, this.sourceX, this.sourceY, this.sourceWidth, this.sourceHeight, this.x, this.y, this.width, this.height);
+			_main2.default.skin.draw(context, 'score-board', 0, this.x, this.y, this.width, this.height);
 
 			this.numbers.forEach(function (number) {
 				number.render(context);
@@ -2134,7 +2023,7 @@ var ScoreBoard = function () {
 
 exports.default = ScoreBoard;
 
-},{"./../main.js":15,"./Number":9}],13:[function(require,module,exports){
+},{"./../main.js":14,"./Number":8}],12:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2161,18 +2050,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var Section = function () {
 	function Section(x, noMonsters) {
+		var flipped = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+
 		_classCallCheck(this, Section);
 
-		this.image = _main2.default.spriteImage;
 		this.x = x;
 		this.y = _main2.default.height - 108;
 		this.width = 1400;
 		this.height = 196;
-
-		this.sourceX = 428;
-		this.sourceY = 0;
-		this.sourceWidth = 1400;
-		this.sourceHeight = 196;
+		this.flipped = flipped;
 
 		this.obstacles = [];
 
@@ -2205,7 +2091,7 @@ var Section = function () {
 	_createClass(Section, [{
 		key: 'render',
 		value: function render(context) {
-			context.drawImage(this.image, this.sourceX, this.sourceY, this.sourceWidth, this.sourceHeight, this.x, this.y, this.width, this.height);
+			_main2.default.skin.draw(context, 'bg-ground', 0, this.x, this.y, this.width, this.height, this.flipped);
 
 			this.obstacles.forEach(function (obstacle) {
 				obstacle.x -= _main2.default.speed;
@@ -2223,7 +2109,7 @@ var Section = function () {
 
 exports.default = Section;
 
-},{"./../main.js":15,"./Obstacle":10,"gsap":16}],14:[function(require,module,exports){
+},{"./../main.js":14,"./Obstacle":9,"gsap":21}],13:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2244,32 +2130,26 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var TITLE_PARTS = {
+	main: 'text-title',
+	jump: 'text-jump',
+	duck: 'text-duck',
+	retry: 'text-retry'
+};
+
 var Title = function () {
 	function Title(type) {
 		_classCallCheck(this, Title);
 
 		this.counter = 0;
-		this.image = _main2.default.spriteImage;
 		this.type = type;
+		this.part = TITLE_PARTS[type];
 
 		if (this.type === 'main') {
-			// this.width = 549
-			// this.height = 99
-			// this.x = 85
-			// this.y = 98
-			// this.sourceX = 0
-			// this.sourceY = 1976
-			// this.sourceWidth = 549
-			// this.sourceHeight = 99
-
 			this.width = 554;
 			this.height = 70;
 			this.x = 85;
 			this.y = 98;
-			this.sourceX = 626;
-			this.sourceY = 2112;
-			this.sourceWidth = 554;
-			this.sourceHeight = 70;
 		}
 
 		if (this.type === 'jump') {
@@ -2277,10 +2157,6 @@ var Title = function () {
 			this.height = 84;
 			this.x = 85;
 			this.y = 60;
-			this.sourceX = 0;
-			this.sourceY = 2252;
-			this.sourceWidth = 594;
-			this.sourceHeight = 84;
 		}
 
 		if (this.type === 'duck') {
@@ -2288,10 +2164,6 @@ var Title = function () {
 			this.height = 113;
 			this.x = 85;
 			this.y = 60;
-			this.sourceX = 0;
-			this.sourceY = 2091;
-			this.sourceWidth = 600;
-			this.sourceHeight = 113;
 		}
 
 		if (this.type === 'retry') {
@@ -2299,10 +2171,6 @@ var Title = function () {
 			this.height = 112;
 			this.x = 85;
 			this.y = 60;
-			this.sourceX = 0;
-			this.sourceY = 2372;
-			this.sourceWidth = 446;
-			this.sourceHeight = 112;
 		}
 	}
 
@@ -2314,7 +2182,7 @@ var Title = function () {
 				context.fillRect(this.x, this.y, this.width, this.height);
 			}
 
-			context.drawImage(this.image, this.sourceX, this.sourceY, this.sourceWidth, this.sourceHeight, this.x, this.y, this.width, this.height);
+			_main2.default.skin.draw(context, this.part, 0, this.x, this.y, this.width, this.height);
 		}
 	}]);
 
@@ -2323,7 +2191,7 @@ var Title = function () {
 
 exports.default = Title;
 
-},{"./../main":15,"gsap":16}],15:[function(require,module,exports){
+},{"./../main":14,"gsap":21}],14:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2334,45 +2202,52 @@ var _Game = require('./game/Game.js');
 
 var _Game2 = _interopRequireDefault(_Game);
 
+var _loadSkin = require('./skin/loadSkin.js');
+
+var _loadSkin2 = _interopRequireDefault(_loadSkin);
+
+var _files = require('./skin/files.js');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Q = {};
 
-function getMask(x, y, width, height) {
-	var canvas = document.createElement('canvas');
-	var context = canvas.getContext('2d');
-	canvas.width = width;
-	canvas.height = height;
-	document.body.appendChild(canvas);
-	context.drawImage(Q.spriteImage, x, y, width, height, 0, 0, width, height);
-	var array = [];
-
-	for (var _x = 0; _x < width; _x += 1) {
-		array[_x] = [];
-		for (var _y = 0; _y < height; _y += 1) {
-			var data = context.getImageData(_x, _y, 1, 1).data;
-			var value = ' ';
-			if (data[0] === 255) {
-				value = 'x';
-			}
-			array[_x][_y] = value;
-		}
+function showStartTitle(skin) {
+	var image = document.querySelector('.start-title');
+	if (image) {
+		image.src = skin.imageUrl('text-start');
 	}
-
-	document.body.removeChild(canvas);
-
-	return array;
 }
 
-function spriteImageLoaded() {
-	// Get masks
-	Q.masks = [];
-	Q.masks[0] = getMask(464, 1878, 156, 72); // Slime monster
-	Q.masks[1] = getMask(286, 1834, 168, 116); // Flying saucer
-	Q.masks[2] = getMask(630, 1870, 104, 80); // Pink Snake
-	Q.masks[3] = Q.masks[2]; // Yellow Snake
-	Q.masks[4] = getMask(88, 1758, 188, 192); // Dragon
-	Q.GAME = new _Game2.default();
+// 檔名打錯等問題直接顯示在開始畫面，不用打開開發者工具
+function showSkinProblems(problems) {
+	var list = document.querySelector('.skin-problems');
+	if (!list || problems.length === 0) {
+		return;
+	}
+	problems.forEach(function (problem) {
+		var item = document.createElement('li');
+		item.textContent = (0, _files.describeProblem)(problem);
+		list.appendChild(item);
+	});
+	list.hidden = false;
+	console.warn('[skin]', problems);
+}
+
+// 圖片處理完才能開始，載入期間先顯示 Loading，避免點了沒反應
+function showStartReady() {
+	var message = document.querySelector('.start-message');
+	if (message) {
+		message.textContent = 'Click anywhere to start game';
+	}
+}
+
+function showStartError(error) {
+	console.error(error);
+	var message = document.querySelector('.start-message');
+	if (message) {
+		message.textContent = '\u904A\u6232\u7121\u6CD5\u555F\u52D5\uFF1A' + error.message;
+	}
 }
 
 function doubleClick(event) {
@@ -2386,17 +2261,769 @@ function doubleClick(event) {
 function init() {
 	Q.width = 720;
 	Q.height = 576;
-	Q.spriteImage = new Image();
-	Q.spriteImage.addEventListener('load', spriteImageLoaded);
-	Q.spriteImage.src = './assets/sprite.png';
 	window.addEventListener('dblclick', doubleClick);
+	// 直接雙擊 index.html 時瀏覽器不准讀圖片像素，也不能用麥克風
+	if (window.location.protocol === 'file:') {
+		showStartError(new Error('請用本機伺服器開啟，不能直接雙擊 index.html（做法見 assets/skin/_說明.md）'));
+		return;
+	}
+	(0, _loadSkin2.default)().then(function (skin) {
+		Q.skin = skin;
+		showStartTitle(skin);
+		showSkinProblems(skin.problems);
+		Q.GAME = new _Game2.default();
+		showStartReady();
+	}).catch(showStartError);
 }
 
 window.addEventListener('load', init);
 
 exports.default = Q;
 
-},{"./game/Game.js":5}],16:[function(require,module,exports){
+},{"./game/Game.js":5,"./skin/files.js":16,"./skin/loadSkin.js":17}],15:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); // 遊戲物件透過 Q.skin 取得圖片與碰撞遮罩，不需要知道圖片來自哪個檔案
+
+
+var _pixels = require('./pixels.js');
+
+var _manifest = require('./manifest.js');
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Skin = function () {
+	function Skin(parts, problems) {
+		_classCallCheck(this, Skin);
+
+		this.parts = parts;
+		this.problems = problems;
+	}
+
+	_createClass(Skin, [{
+		key: 'frame',
+		value: function frame(name) {
+			var index = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+
+			var part = this.parts[name];
+			return part ? (0, _pixels.pickFrame)(part.frames, index) : null;
+		}
+	}, {
+		key: 'frameCount',
+		value: function frameCount(name) {
+			var part = (0, _manifest.findPart)(name);
+			return part ? part.frames : 0;
+		}
+	}, {
+		key: 'mask',
+		value: function mask(name) {
+			var part = this.parts[name];
+			return part && part.mask ? part.mask : null;
+		}
+	}, {
+		key: 'isCustom',
+		value: function isCustom(name) {
+			var part = this.parts[name];
+			return Boolean(part && part.isCustom);
+		}
+	}, {
+		key: 'imageUrl',
+		value: function imageUrl(name) {
+			var frame = this.frame(name);
+			return frame ? frame.toDataURL() : '';
+		}
+
+		// flipped：背景每隔一張左右鏡像，自訂背景就不用處理接縫
+
+	}, {
+		key: 'draw',
+		value: function draw(context, name, index, x, y, width, height) {
+			var flipped = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : false;
+
+			var frame = this.frame(name, index);
+			if (!frame) {
+				return;
+			}
+			if (flipped && this.isCustom(name)) {
+				context.save();
+				context.translate(x + width, y);
+				context.scale(-1, 1);
+				context.drawImage(frame, 0, 0, width, height);
+				context.restore();
+			} else {
+				context.drawImage(frame, x, y, width, height);
+			}
+		}
+	}]);
+
+	return Skin;
+}();
+
+exports.default = Skin;
+
+},{"./manifest.js":18,"./pixels.js":19}],16:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.isSkinCandidate = isSkinCandidate;
+exports.parseDirectoryListing = parseDirectoryListing;
+exports.normalizeName = normalizeName;
+exports.matchSkinFiles = matchSkinFiles;
+exports.describeProblem = describeProblem;
+// 把 assets/skin 裡的檔名對應到部位，並找出對不上的檔案
+
+var IMAGE_EXTENSION = /\.(png|jpe?g|webp|gif)$/i;
+var FRAME_SUFFIX = /^(.+)-(\d+)$/;
+var LINK = /<a\s[^>]*href\s*=\s*["']([^"']+)["']/gi;
+var SYSTEM_FILES = ['thumbs.db', 'desktop.ini'];
+
+// 說明檔（_ 開頭）、隱藏檔和系統檔都不是圖片
+function isSkinCandidate(name) {
+	return !name.startsWith('.') && !name.startsWith('_') && !SYSTEM_FILES.includes(name.toLowerCase());
+}
+
+function fileInFolder(href, folder) {
+	var url = void 0;
+	try {
+		url = new URL(href.replace(/&amp;/g, '&'), folder);
+	} catch (error) {
+		return null;
+	}
+	if (url.origin !== folder.origin || url.search || !url.pathname.startsWith(folder.pathname)) {
+		return null;
+	}
+	var rest = url.pathname.slice(folder.pathname.length);
+	if (rest === '' || rest.includes('/')) {
+		return null;
+	}
+	try {
+		return decodeURIComponent(rest);
+	} catch (error) {
+		return null;
+	}
+}
+
+// 讀取本機伺服器（Live Server、python http.server）產生的資料夾清單頁，
+// 讓直接放進編譯好資料夾的圖片不用重新 build 也能被找到
+function parseDirectoryListing(html, folderUrl) {
+	var folder = new URL(folderUrl);
+	var names = [];
+	LINK.lastIndex = 0;
+	var match = LINK.exec(html);
+	while (match !== null) {
+		var name = fileInFolder(match[1], folder);
+		if (name && !names.includes(name)) {
+			names.push(name);
+		}
+		match = LINK.exec(html);
+	}
+	return names;
+}
+
+// 容許常見的手誤：多餘空白、「 - 」、Windows 隱藏副檔名造成的 .png.png
+function normalizeName(file) {
+	var base = file.trim();
+	while (IMAGE_EXTENSION.test(base)) {
+		base = base.replace(IMAGE_EXTENSION, '').trim();
+	}
+	return base.toLowerCase().replace(/[\s_-]+/g, '-').replace(/^-+|-+$/g, '');
+}
+
+function locate(file, partsByName) {
+	var base = normalizeName(file);
+	if (partsByName.has(base)) {
+		return { part: partsByName.get(base), frame: 1, isBare: true };
+	}
+	var match = FRAME_SUFFIX.exec(base);
+	if (match && partsByName.has(match[1])) {
+		return { part: partsByName.get(match[1]), frame: parseInt(match[2], 10), isBare: false };
+	}
+	return null;
+}
+
+function classify(file, partsByName) {
+	if (!IMAGE_EXTENSION.test(file.trim())) {
+		return { problem: { file: file, reason: 'unsupported' } };
+	}
+	var target = locate(file, partsByName);
+	if (!target) {
+		return { problem: { file: file, reason: 'unknown' } };
+	}
+	if (target.frame < 1 || target.frame > target.part.frames) {
+		return { problem: { file: file, reason: 'frame-out-of-range', limit: target.part.frames } };
+	}
+	return { slot: { file: file, name: target.part.name, frame: target.frame, isBare: target.isBare } };
+}
+
+// 有編號的檔案優先，其次依檔名排序，讓重複時的結果固定
+function compareSlots(a, b) {
+	if (a.isBare !== b.isBare) {
+		return a.isBare ? 1 : -1;
+	}
+	return a.file < b.file ? -1 : 1;
+}
+
+function matchSkinFiles(parts, files) {
+	var partsByName = new Map(parts.map(function (part) {
+		return [part.name, part];
+	}));
+	var classified = files.filter(function (file) {
+		return typeof file === 'string';
+	}).map(function (file) {
+		return classify(file, partsByName);
+	});
+
+	var problems = classified.filter(function (item) {
+		return item.problem;
+	}).map(function (item) {
+		return item.problem;
+	});
+	var slots = classified.filter(function (item) {
+		return item.slot;
+	}).map(function (item) {
+		return item.slot;
+	}).sort(compareSlots);
+
+	var taken = new Set();
+	var chosen = [];
+	slots.forEach(function (slot) {
+		var key = slot.name + '#' + slot.frame;
+		if (taken.has(key)) {
+			problems.push({ file: slot.file, reason: 'duplicate' });
+		} else {
+			taken.add(key);
+			chosen.push(slot);
+		}
+	});
+
+	var assignments = {};
+	chosen.sort(function (a, b) {
+		return a.frame - b.frame;
+	}).forEach(function (slot) {
+		assignments[slot.name] = (assignments[slot.name] || []).concat(slot.file);
+	});
+
+	return { assignments: assignments, problems: problems };
+}
+
+function describeProblem(problem) {
+	var file = problem.file;
+	switch (problem.reason) {
+		case 'unknown':
+			return file + '\uFF1A\u6A94\u540D\u5C0D\u4E0D\u4E0A\u4EFB\u4F55\u5716\u7247\uFF0C\u8ACB\u5C0D\u7167 _\u8AAA\u660E.md \u7684\u6A94\u540D';
+		case 'frame-out-of-range':
+			return file + '\uFF1A\u52D5\u756B\u7DE8\u865F\u8981\u5728 1\uFF5E' + problem.limit + ' \u4E4B\u9593';
+		case 'unsupported':
+			return file + '\uFF1A\u683C\u5F0F\u4E0D\u652F\u63F4\uFF0C\u8ACB\u5B58\u6210 png\u3001jpg \u6216 webp';
+		case 'duplicate':
+			return file + '\uFF1A\u8DDF\u53E6\u4E00\u5F35\u5716\u91CD\u8907\u4E86\uFF0C\u9019\u5F35\u6C92\u6709\u4F7F\u7528';
+		case 'load-failed':
+			return file + '\uFF1A\u5716\u7247\u8B80\u53D6\u5931\u6557\uFF0C\u53EF\u80FD\u9084\u5728\u8907\u88FD\u6216\u6A94\u6848\u640D\u58DE\uFF0C\u8ACB\u7A0D\u5F8C\u91CD\u65B0\u6574\u7406';
+		case 'index-invalid':
+			return file + '\uFF1A\u5716\u7247\u6E05\u55AE\u8B80\u53D6\u5931\u6557\uFF0C\u81EA\u8A02\u5716\u7247\u66AB\u6642\u6C92\u6709\u5957\u7528\uFF0C\u8ACB\u91CD\u65B0\u6574\u7406';
+		default:
+			return file + '\uFF1A\u6C92\u6709\u4F7F\u7528';
+	}
+}
+
+},{}],17:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = loadSkin;
+
+var _manifest = require('./manifest.js');
+
+var _files = require('./files.js');
+
+var _resolve = require('./resolve.js');
+
+var _pixels = require('./pixels.js');
+
+var _Skin = require('./Skin.js');
+
+var _Skin2 = _interopRequireDefault(_Skin);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function loadImage(url) {
+	return new Promise(function (resolve, reject) {
+		var image = new Image();
+		image.onload = function () {
+			return resolve(image);
+		};
+		image.onerror = function () {
+			return reject(new Error('\u627E\u4E0D\u5230\u5716\u7247\uFF1A' + decodeURIComponent(url)));
+		};
+		image.src = url;
+	});
+}
+
+// 沒有 skin-files.json（例如還沒 build）就當作沒有自訂圖；內容壞掉則提示使用者
+// 瀏覽器端：讀取所有部位的圖片，處理成遊戲裡的大小，組成 Skin
+function fetchSkinFiles() {
+	var invalid = { files: [], problems: [{ file: _manifest.SKIN_FILES_INDEX, reason: 'index-invalid' }] };
+	return fetch(_manifest.SKIN_FILES_INDEX, { cache: 'no-store' }).then(function (response) {
+		if (!response.ok) {
+			return { files: [], problems: [] };
+		}
+		return response.json().then(function (files) {
+			return Array.isArray(files) ? { files: files, problems: [] } : invalid;
+		}, function () {
+			return invalid;
+		});
+	}, function () {
+		return { files: [], problems: [] };
+	});
+}
+
+// 本機伺服器若提供資料夾清單，就以實際檔案為準（拿到編譯好的資料夾直接放圖也能用）；
+// 沒有清單的網站（例如 GitHub Pages）才改用 build 時產生的 skin-files.json
+function fetchDirectoryListing() {
+	var folderUrl = new URL(_manifest.SKIN_DIR + '/', window.location.href).href;
+	return fetch(folderUrl, { cache: 'no-store' }).then(function (response) {
+		var type = response.headers.get('content-type') || '';
+		if (!response.ok || !type.includes('text/html')) {
+			return null;
+		}
+		return response.text().then(function (html) {
+			var names = (0, _files.parseDirectoryListing)(html, folderUrl);
+			return names.length > 0 ? names.filter(_files.isSkinCandidate) : null;
+		});
+	}).catch(function () {
+		return null;
+	});
+}
+
+function findSkinFiles() {
+	return fetchDirectoryListing().then(function (files) {
+		return files ? { files: files, problems: [] } : fetchSkinFiles();
+	});
+}
+
+function createCanvas(width, height) {
+	var canvas = document.createElement('canvas');
+	canvas.width = width;
+	canvas.height = height;
+	return canvas;
+}
+
+function readPixels(canvas) {
+	return canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height).data;
+}
+
+function toCanvas(image) {
+	var canvas = createCanvas(image.naturalWidth || image.width, image.naturalHeight || image.height);
+	canvas.getContext('2d').drawImage(image, 0, 0);
+	return canvas;
+}
+
+function withoutBackground(canvas, edges) {
+	var pixels = (0, _pixels.removeBackground)(readPixels(canvas), canvas.width, canvas.height, edges);
+	var cleaned = createCanvas(canvas.width, canvas.height);
+	cleaned.getContext('2d').putImageData(new ImageData(pixels, canvas.width, canvas.height), 0, 0);
+	return cleaned;
+}
+
+// 縮小時平滑處理；放大時保持像素銳利
+function drawInto(part, source, from) {
+	var to = (0, _pixels.fitRect)(from.width, from.height, part.width, part.height, part.fit);
+	var canvas = createCanvas(part.width, part.height);
+	var context = canvas.getContext('2d');
+	context.imageSmoothingEnabled = to.width < from.width;
+	context.imageSmoothingQuality = 'high';
+	context.drawImage(source, from.x, from.y, from.width, from.height, to.x, to.y, to.width, to.height);
+	return canvas;
+}
+
+function renderCustomFrames(part, images) {
+	var sources = images.map(toCanvas);
+	if (part.fit === 'fill') {
+		return sources.map(function (source) {
+			return part.clearSky ? withoutBackground(source, 'top') : source;
+		}).map(function (source) {
+			return drawInto(part, source, { x: 0, y: 0, width: source.width, height: source.height });
+		});
+	}
+	var cleaned = sources.map(function (source) {
+		return withoutBackground(source, 'all');
+	});
+	var bounds = (0, _pixels.frameBounds)(cleaned.map(function (canvas) {
+		return {
+			width: canvas.width,
+			height: canvas.height,
+			bounds: (0, _pixels.alphaBounds)(readPixels(canvas), canvas.width, canvas.height)
+		};
+	}));
+	return cleaned.map(function (canvas, index) {
+		return drawInto(part, canvas, bounds[index]);
+	});
+}
+
+function renderOriginalFrames(part, images) {
+	return images.map(function (image) {
+		return drawInto(part, image, { x: 0, y: 0, width: part.width, height: part.height });
+	});
+}
+
+function preparePart(part, files) {
+	return (0, _resolve.resolvePartImages)((0, _resolve.customUrls)(files, _manifest.SKIN_DIR), (0, _resolve.originalUrls)(part, _manifest.ORIGINAL_DIR), loadImage).then(function (_ref) {
+		var images = _ref.images,
+		    isCustom = _ref.isCustom,
+		    failed = _ref.failed;
+
+		var frames = isCustom ? renderCustomFrames(part, images) : renderOriginalFrames(part, images);
+		var mask = part.mask ? (0, _pixels.maskFromPixels)(frames.map(readPixels), part.width, part.height) : null;
+		var problems = failed.map(function (url) {
+			return { file: decodeURIComponent(url.split('/').pop()), reason: 'load-failed' };
+		});
+		return { name: part.name, data: { frames: frames, mask: mask, isCustom: isCustom }, problems: problems };
+	});
+}
+
+function loadSkin() {
+	return findSkinFiles().then(function (index) {
+		var matched = (0, _files.matchSkinFiles)(_manifest.PARTS, index.files);
+		var pending = _manifest.PARTS.map(function (part) {
+			return preparePart(part, matched.assignments[part.name] || []);
+		});
+		return Promise.all(pending).then(function (results) {
+			var parts = {};
+			results.forEach(function (result) {
+				parts[result.name] = result.data;
+			});
+			var problems = results.reduce(function (all, result) {
+				return all.concat(result.problems);
+			}, index.problems.concat(matched.problems));
+			return new _Skin2.default(parts, problems);
+		});
+	});
+}
+
+},{"./Skin.js":15,"./files.js":16,"./manifest.js":18,"./pixels.js":19,"./resolve.js":20}],18:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.findPart = findPart;
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+// 換圖清單：每個部位的檔名、動畫格數、在遊戲中的大小與縮放方式
+// fit: 'fill' 拉滿整格（背景用）、'bottom' 等比縮放貼齊底部、'center' 等比縮放置中
+// mask: 是否用圖片的不透明區域當碰撞範圍
+// clearSky: 山會疊在其他背景前面，自訂圖上方的純色天空要變透明
+
+var SKIN_DIR = exports.SKIN_DIR = 'assets/skin';
+var ORIGINAL_DIR = exports.ORIGINAL_DIR = 'assets/skin-original';
+var SKIN_FILES_INDEX = exports.SKIN_FILES_INDEX = 'skin-files.json';
+
+function part(name, label, frames, width, height, fit) {
+	var options = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : {};
+
+	return Object.freeze({
+		name: name,
+		label: label,
+		frames: frames,
+		width: width,
+		height: height,
+		fit: fit,
+		mask: Boolean(options.mask),
+		clearSky: Boolean(options.clearSky)
+	});
+}
+
+var OBSTACLE = { mask: true };
+var MOUNTAIN = { clearSky: true };
+
+var DIGITS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+var COUNTDOWN_DIGITS = [1, 2, 3];
+
+var PARTS = exports.PARTS = Object.freeze([part('player-run', '主角：跑步', 2, 96, 108, 'bottom'), part('player-duck', '主角：蹲下', 2, 96, 108, 'bottom'), part('player-jump', '主角：跳躍', 2, 96, 108, 'bottom'), part('player-dead', '主角：撞到倒下', 5, 96, 108, 'bottom'), part('ground-slime', '地面怪：史萊姆（要跳過）', 4, 156, 72, 'bottom', OBSTACLE), part('ground-snake-pink', '地面怪：粉紅蛇（要跳過）', 2, 104, 80, 'bottom', OBSTACLE), part('ground-snake-yellow', '地面怪：黃蛇（要跳過）', 2, 104, 80, 'bottom', OBSTACLE), part('air-saucer', '空中怪：飛碟（要蹲下）', 3, 168, 116, 'bottom', OBSTACLE), part('air-dragon', '空中怪：龍（要蹲下）', 2, 188, 192, 'bottom', OBSTACLE), part('bg-sky', '背景：天空', 1, 1400, 572, 'fill'), part('bg-mountain-far', '背景：遠山', 1, 1400, 453, 'fill', MOUNTAIN), part('bg-mountain-mid', '背景：中山', 1, 1400, 342, 'fill', MOUNTAIN), part('bg-mountain-near', '背景：近山', 1, 1400, 100, 'fill', MOUNTAIN), part('bg-ground', '背景：地面', 1, 1400, 196, 'fill'), part('text-start', '文字：開始畫面標題', 1, 700, 88, 'center'), part('text-title', '文字：遊戲標題', 1, 554, 70, 'center'), part('text-duck', '文字：拍手蹲下', 1, 600, 113, 'center'), part('text-jump', '文字：喊「喔」跳躍', 1, 594, 84, 'center'), part('text-retry', '文字：拍手重來', 1, 446, 112, 'center'), part('hint-clap', '教學圖示：拍手', 3, 144, 204, 'center'), part('hint-say', '教學圖示：說話', 3, 155, 148, 'center'), part('score-board', '分數底板', 1, 100, 52, 'fill')].concat(_toConsumableArray(DIGITS.map(function (digit) {
+	return part('score-' + digit, '\u5206\u6578\u6578\u5B57 ' + digit, 1, 20, 28, 'center');
+})), _toConsumableArray(COUNTDOWN_DIGITS.map(function (digit) {
+	return part('countdown-' + digit, '\u5012\u6578\u6578\u5B57 ' + digit, 1, 80, 116, 'center');
+}))));
+
+function findPart(name) {
+	return PARTS.find(function (item) {
+		return item.name === name;
+	}) || null;
+}
+
+},{}],19:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.pickFrame = pickFrame;
+exports.fitRect = fitRect;
+exports.alphaBounds = alphaBounds;
+exports.frameBounds = frameBounds;
+exports.removeBackground = removeBackground;
+exports.maskFromPixels = maskFromPixels;
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+// 純像素運算：縮放位置、去背、裁切範圍、碰撞遮罩（不依賴瀏覽器，方便測試）
+
+var VISIBLE_ALPHA = 16;
+var BACKGROUND_TOLERANCE = 40;
+
+function pickFrame(frames, index) {
+	if (!frames || frames.length === 0) {
+		return null;
+	}
+	var count = frames.length;
+	return frames[(index % count + count) % count];
+}
+
+function fitRect(sourceWidth, sourceHeight, boxWidth, boxHeight, fit) {
+	if (fit === 'fill' || sourceWidth <= 0 || sourceHeight <= 0) {
+		return { x: 0, y: 0, width: boxWidth, height: boxHeight };
+	}
+	var scale = Math.min(boxWidth / sourceWidth, boxHeight / sourceHeight);
+	var width = sourceWidth * scale;
+	var height = sourceHeight * scale;
+	var x = (boxWidth - width) / 2;
+	var y = fit === 'bottom' ? boxHeight - height : (boxHeight - height) / 2;
+	return { x: x, y: y, width: width, height: height };
+}
+
+function alphaBounds(pixels, width, height) {
+	var threshold = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : VISIBLE_ALPHA;
+
+	var left = width;
+	var top = height;
+	var right = -1;
+	var bottom = -1;
+	for (var y = 0; y < height; y += 1) {
+		for (var x = 0; x < width; x += 1) {
+			if (pixels[(y * width + x) * 4 + 3] >= threshold) {
+				left = Math.min(left, x);
+				top = Math.min(top, y);
+				right = Math.max(right, x);
+				bottom = Math.max(bottom, y);
+			}
+		}
+	}
+	if (right < 0) {
+		return null;
+	}
+	return { x: left, y: top, width: right - left + 1, height: bottom - top + 1 };
+}
+
+function unionBounds(list) {
+	if (list.length === 0) {
+		return null;
+	}
+	var left = Math.min.apply(Math, _toConsumableArray(list.map(function (b) {
+		return b.x;
+	})));
+	var top = Math.min.apply(Math, _toConsumableArray(list.map(function (b) {
+		return b.y;
+	})));
+	var right = Math.max.apply(Math, _toConsumableArray(list.map(function (b) {
+		return b.x + b.width;
+	})));
+	var bottom = Math.max.apply(Math, _toConsumableArray(list.map(function (b) {
+		return b.y + b.height;
+	})));
+	return { x: left, y: top, width: right - left, height: bottom - top };
+}
+
+// 同一組動畫若尺寸一致，用共同的裁切範圍，避免每格位置跳動
+function frameBounds(frames) {
+	var whole = function whole(frame) {
+		return { x: 0, y: 0, width: frame.width, height: frame.height };
+	};
+	var first = frames[0];
+	var sameSize = frames.every(function (frame) {
+		return frame.width === first.width && frame.height === first.height;
+	});
+	if (!sameSize) {
+		return frames.map(function (frame) {
+			return frame.bounds || whole(frame);
+		});
+	}
+	var union = unionBounds(frames.map(function (frame) {
+		return frame.bounds;
+	}).filter(Boolean));
+	return frames.map(function (frame) {
+		return union || whole(frame);
+	});
+}
+
+function isFullyOpaque(pixels) {
+	for (var i = 3; i < pixels.length; i += 4) {
+		if (pixels[i] < 255) {
+			return false;
+		}
+	}
+	return true;
+}
+
+function isSimilar(pixels, index, color, tolerance) {
+	var offset = index * 4;
+	return Math.abs(pixels[offset] - color[0]) <= tolerance && Math.abs(pixels[offset + 1] - color[1]) <= tolerance && Math.abs(pixels[offset + 2] - color[2]) <= tolerance;
+}
+
+function topIndexes(width) {
+	var indexes = [];
+	for (var x = 0; x < width; x += 1) {
+		indexes.push(x);
+	}
+	return indexes;
+}
+
+function borderIndexes(width, height) {
+	var indexes = topIndexes(width);
+	for (var x = 0; x < width; x += 1) {
+		indexes.push((height - 1) * width + x);
+	}
+	for (var y = 1; y < height - 1; y += 1) {
+		indexes.push(y * width, y * width + width - 1);
+	}
+	return indexes;
+}
+
+// AI 生成的圖常是純色背景：若角落同色，就從邊緣把相連的背景色變透明
+// edges：'all' 從四邊找背景（角色、怪物），'top' 只從上緣找（山的天空）
+function removeBackground(pixels, width, height) {
+	var edges = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'all';
+	var tolerance = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : BACKGROUND_TOLERANCE;
+
+	var result = new Uint8ClampedArray(pixels);
+	if (!isFullyOpaque(pixels)) {
+		return result;
+	}
+	var background = [pixels[0], pixels[1], pixels[2]];
+	var corners = edges === 'top' ? [width - 1] : [width - 1, (height - 1) * width, height * width - 1];
+	if (!corners.every(function (index) {
+		return isSimilar(pixels, index, background, tolerance);
+	})) {
+		return result;
+	}
+
+	var seeds = edges === 'top' ? topIndexes(width) : borderIndexes(width, height);
+	var visited = new Uint8Array(width * height);
+	var stack = seeds.filter(function (index) {
+		return isSimilar(pixels, index, background, tolerance);
+	});
+	stack.forEach(function (index) {
+		visited[index] = 1;
+	});
+
+	while (stack.length > 0) {
+		var index = stack.pop();
+		result[index * 4 + 3] = 0;
+		var x = index % width;
+		var neighbours = [x > 0 ? index - 1 : -1, x < width - 1 ? index + 1 : -1, index - width, index + width];
+		neighbours.forEach(function (next) {
+			if (next >= 0 && next < width * height && !visited[next] && isSimilar(pixels, next, background, tolerance)) {
+				visited[next] = 1;
+				stack.push(next);
+			}
+		});
+	}
+	return result;
+}
+
+// 與原本紅色剪影相同的格式：mask[x][y] 為 'x' 代表會撞到
+// 半透明的部分（例如飛碟的玻璃罩）也算，才會和原版剪影的範圍一致
+function maskFromPixels(pixelsList, width, height) {
+	var threshold = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : VISIBLE_ALPHA;
+
+	var mask = [];
+	for (var x = 0; x < width; x += 1) {
+		var column = [];
+
+		var _loop = function _loop(y) {
+			var offset = (y * width + x) * 4 + 3;
+			var solid = pixelsList.some(function (pixels) {
+				return pixels[offset] >= threshold;
+			});
+			column.push(solid ? 'x' : ' ');
+		};
+
+		for (var y = 0; y < height; y += 1) {
+			_loop(y);
+		}
+		mask.push(column);
+	}
+	return mask;
+}
+
+},{}],20:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.originalUrls = originalUrls;
+exports.customUrls = customUrls;
+exports.resolvePartImages = resolvePartImages;
+// 決定每個部位要用自訂圖還是原版圖：自訂圖至少有一張讀得到就用自訂，否則用原版
+
+function originalUrls(part, dir) {
+	if (part.frames === 1) {
+		return [dir + "/" + part.name + ".png"];
+	}
+	var urls = [];
+	for (var frame = 1; frame <= part.frames; frame += 1) {
+		urls.push(dir + "/" + part.name + "-" + frame + ".png");
+	}
+	return urls;
+}
+
+function customUrls(files, dir) {
+	return files.map(function (file) {
+		return dir + "/" + encodeURIComponent(file);
+	});
+}
+
+function loadOptional(url, loadImage) {
+	return loadImage(url).then(function (image) {
+		return { url: url, image: image };
+	}, function () {
+		return { url: url, image: null };
+	});
+}
+
+function resolvePartImages(custom, originals, loadImage) {
+	return Promise.all(custom.map(function (url) {
+		return loadOptional(url, loadImage);
+	})).then(function (results) {
+		var images = results.filter(function (result) {
+			return result.image;
+		}).map(function (result) {
+			return result.image;
+		});
+		var failed = results.filter(function (result) {
+			return !result.image;
+		}).map(function (result) {
+			return result.url;
+		});
+		if (images.length > 0) {
+			return { images: images, isCustom: true, failed: failed };
+		}
+		return Promise.all(originals.map(loadImage)).then(function (loaded) {
+			return { images: loaded, isCustom: false, failed: failed };
+		});
+	});
+}
+
+},{}],21:[function(require,module,exports){
 (function (global){
 /*!
  * VERSION: 1.20.3
@@ -10361,7 +10988,7 @@ if (_gsScope._gsDefine) { _gsScope._gsQueue.pop()(); } //necessary in case Tween
 
 })((typeof(module) !== "undefined" && module.exports && typeof(global) !== "undefined") ? global : this || window, "TweenMax");
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],17:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 !function(t,r){"object"==typeof exports&&"object"==typeof module?module.exports=r():"function"==typeof define&&define.amd?define([],r):"object"==typeof exports?exports.Meyda=r():t.Meyda=r()}(this,function(){return function(t){function r(n){if(e[n])return e[n].exports;var o=e[n]={i:n,l:!1,exports:{}};return t[n].call(o.exports,o,o.exports,r),o.l=!0,o.exports}var e={};return r.m=t,r.c=e,r.i=function(t){return t},r.d=function(t,e,n){r.o(t,e)||Object.defineProperty(t,e,{configurable:!1,enumerable:!0,get:n})},r.n=function(t){var e=t&&t.__esModule?function(){return t.default}:function(){return t};return r.d(e,"a",e),e},r.o=function(t,r){return Object.prototype.hasOwnProperty.call(t,r)},r.p="",r(r.s=22)}([function(t,r,e){"use strict";function n(t,r){for(var e=0,n=0,o=0;o<r.length;o++)e+=Math.pow(o,t)*Math.abs(r[o]),n+=r[o];return e/n}r.a=n},function(t,r,e){"use strict";function n(t){for(;t%2==0&&t>1;)t/=2;return 1===t}function o(t,r){for(var e=[],n=0;n<Math.min(t.length,r.length);n++)e[n]=t[n]*r[n];return e}function i(t,r){if("rect"!==r){if(""!==r&&r||(r="hanning"),p[r]||(p[r]={}),!p[r][t.length])try{p[r][t.length]=s[r](t.length)}catch(t){throw new Error("Invalid windowing function")}t=o(t,p[r][t.length])}return t}function a(t,r,e){for(var n=new Float32Array(t),o=0;o<n.length;o++)n[o]=o*r/e,n[o]=13*Math.atan(n[o]/1315.8)+3.5*Math.atan(Math.pow(n[o]/7518,2));return n}function u(t){return Float32Array.from(t)}function c(t){return 700*(Math.exp(t/1125)-1)}function f(t){return 1125*Math.log(1+t/700)}function l(t,r,e){for(var n=new Float32Array(t+2),o=new Float32Array(t+2),i=r/2,a=f(0),u=f(i),l=u-a,s=l/(t+1),p=Array(t+2),m=0;m<n.length;m++)n[m]=m*s,o[m]=c(n[m]),p[m]=Math.floor((e+1)*o[m]/r);for(var y=Array(t),h=0;h<y.length;h++){y[h]=Array.apply(null,new Array(e/2+1)).map(Number.prototype.valueOf,0);for(var b=p[h];b<p[h+1];b++)y[h][b]=(b-p[h])/(p[h+1]-p[h]);for(var g=p[h+1];g<p[h+2];g++)y[h][g]=(p[h+2]-g)/(p[h+2]-p[h+1])}return y}var s=e(24);r.b=n,r.a=i,r.c=a,r.e=u,r.d=l;var p={}},function(t,r,e){"use strict";var n="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t};r.a=function(t){if("object"!==n(t.ampSpectrum)||"object"!==n(t.barkScale))throw new TypeError;var r=new Float32Array(24),e=0,o=t.ampSpectrum,i=new Int32Array(25);i[0]=0;for(var a=t.barkScale[o.length-1]/24,u=1,c=0;c<o.length;c++)for(;t.barkScale[c]>a;)i[u++]=c,a=u*t.barkScale[o.length-1]/24;i[24]=o.length-1;for(var f=0;f<24;f++){for(var l=0,s=i[f];s<i[f+1];s++)l+=o[s];r[f]=Math.pow(l,.23)}for(var p=0;p<r.length;p++)e+=r[p];return{specific:r,total:e}}},function(t,r,e){"use strict";var n="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t};r.a=function(){if("object"!==n(arguments[0].ampSpectrum))throw new TypeError;for(var t=new Float32Array(arguments[0].ampSpectrum.length),r=0;r<t.length;r++)t[r]=Math.pow(arguments[0].ampSpectrum[r],2);return t}},function(t,r,e){"use strict";Object.defineProperty(r,"__esModule",{value:!0});var n=e(12),o=e(8),i=e(19),a=e(13),u=e(17),c=e(14),f=e(20),l=e(18),s=e(16),p=e(21),m=e(2),y=e(11),h=e(10),b=e(9),g=e(3),S=e(15);e.d(r,"rms",function(){return n.a}),e.d(r,"energy",function(){return o.a}),e.d(r,"spectralSlope",function(){return i.a}),e.d(r,"spectralCentroid",function(){return a.a}),e.d(r,"spectralRolloff",function(){return u.a}),e.d(r,"spectralFlatness",function(){return c.a}),e.d(r,"spectralSpread",function(){return f.a}),e.d(r,"spectralSkewness",function(){return l.a}),e.d(r,"spectralKurtosis",function(){return s.a}),e.d(r,"zcr",function(){return p.a}),e.d(r,"loudness",function(){return m.a}),e.d(r,"perceptualSpread",function(){return y.a}),e.d(r,"perceptualSharpness",function(){return h.a}),e.d(r,"powerSpectrum",function(){return g.a}),e.d(r,"mfcc",function(){return b.a}),e.d(r,"spectralFlux",function(){return S.a}),e.d(r,"buffer",function(){return d}),e.d(r,"complexSpectrum",function(){return v}),e.d(r,"amplitudeSpectrum",function(){return w});var d=function(t){return t.signal},v=function(t){return t.complexSpectrum},w=function(t){return t.ampSpectrum}},function(t,r){var e;e=function(){return this}();try{e=e||Function("return this")()||(0,eval)("this")}catch(t){"object"==typeof window&&(e=window)}t.exports=e},function(t,r,e){"use strict";Object.defineProperty(r,"__esModule",{value:!0});var n=e(1),o=e(4),i=e(27),a=(e.n(i),e(23)),u="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t},c={audioContext:null,spn:null,bufferSize:512,sampleRate:44100,melBands:26,callback:null,windowingFunction:"hanning",featureExtractors:o,EXTRACTION_STARTED:!1,_featuresToExtract:[],windowing:n.a,_errors:{notPow2:new Error("Meyda: Buffer size must be a power of 2, e.g. 64 or 512"),featureUndef:new Error("Meyda: No features defined."),invalidFeatureFmt:new Error("Meyda: Invalid feature format"),invalidInput:new Error("Meyda: Invalid input."),noAC:new Error("Meyda: No AudioContext specified."),noSource:new Error("Meyda: No source node specified.")},createMeydaAnalyzer:function(t){return new a.a(t,c)},extract:function(t,r,e){if(!r)throw this._errors.invalidInput;if("object"!=(void 0===r?"undefined":u(r)))throw this._errors.invalidInput;if(!t)throw this._errors.featureUndef;if(!n.b(r.length))throw this._errors.notPow2;void 0!==this.barkScale&&this.barkScale.length==this.bufferSize||(this.barkScale=n.c(this.bufferSize,this.sampleRate,this.bufferSize)),void 0!==this.melFilterBank&&this.barkScale.length==this.bufferSize&&this.melFilterBank.length==this.melBands||(this.melFilterBank=n.d(this.melBands,this.sampleRate,this.bufferSize)),void 0===r.buffer?this.signal=n.e(r):this.signal=r;var o=f(r,this.windowingFunction,this.bufferSize);if(this.signal=o.windowedSignal,this.complexSpectrum=o.complexSpectrum,this.ampSpectrum=o.ampSpectrum,e){var i=f(e,this.windowingFunction,this.bufferSize);this.previousSignal=i.windowedSignal,this.previousComplexSpectrum=i.complexSpectrum,this.previousAmpSpectrum=i.ampSpectrum}if("object"===(void 0===t?"undefined":u(t))){for(var a={},c=0;c<t.length;c++)a[t[c]]=this.featureExtractors[t[c]]({ampSpectrum:this.ampSpectrum,complexSpectrum:this.complexSpectrum,signal:this.signal,bufferSize:this.bufferSize,sampleRate:this.sampleRate,barkScale:this.barkScale,melFilterBank:this.melFilterBank,previousSignal:this.previousSignal,previousAmpSpectrum:this.previousAmpSpectrum,previousComplexSpectrum:this.previousComplexSpectrum});return a}if("string"==typeof t)return this.featureExtractors[t]({ampSpectrum:this.ampSpectrum,complexSpectrum:this.complexSpectrum,signal:this.signal,bufferSize:this.bufferSize,sampleRate:this.sampleRate,barkScale:this.barkScale,melFilterBank:this.melFilterBank,previousSignal:this.previousSignal,previousAmpSpectrum:this.previousAmpSpectrum,previousComplexSpectrum:this.previousComplexSpectrum});throw this._errors.invalidFeatureFmt}},f=function(t,r,o){var a={};void 0===t.buffer?a.signal=n.e(t):a.signal=t,a.windowedSignal=n.a(a.signal,r),a.complexSpectrum=e.i(i.fft)(a.windowedSignal),a.ampSpectrum=new Float32Array(o/2);for(var u=0;u<o/2;u++)a.ampSpectrum[u]=Math.sqrt(Math.pow(a.complexSpectrum.real[u],2)+Math.pow(a.complexSpectrum.imag[u],2));return a};r.default=c,"undefined"!=typeof window&&(window.Meyda=c)},function(t,r,e){"use strict";(function(r){/*!
  * The buffer module from node.js, for the browser.
  *
@@ -10370,4 +10997,4 @@ if (_gsScope._gsDefine) { _gsScope._gsQueue.pop()(); } //necessary in case Tween
  */
 function n(t,r){if(t===r)return 0;for(var e=t.length,n=r.length,o=0,i=Math.min(e,n);o<i;++o)if(t[o]!==r[o]){e=t[o],n=r[o];break}return e<n?-1:n<e?1:0}function o(t){return r.Buffer&&"function"==typeof r.Buffer.isBuffer?r.Buffer.isBuffer(t):!(null==t||!t._isBuffer)}function i(t){return Object.prototype.toString.call(t)}function a(t){return!o(t)&&("function"==typeof r.ArrayBuffer&&("function"==typeof ArrayBuffer.isView?ArrayBuffer.isView(t):!!t&&(t instanceof DataView||!!(t.buffer&&t.buffer instanceof ArrayBuffer))))}function u(t){if(v.isFunction(t)){if(E)return t.name;var r=t.toString(),e=r.match(M);return e&&e[1]}}function c(t,r){return"string"==typeof t?t.length<r?t:t.slice(0,r):t}function f(t){if(E||!v.isFunction(t))return v.inspect(t);var r=u(t);return"[Function"+(r?": "+r:"")+"]"}function l(t){return c(f(t.actual),128)+" "+t.operator+" "+c(f(t.expected),128)}function s(t,r,e,n,o){throw new _.AssertionError({message:e,actual:t,expected:r,operator:n,stackStartFunction:o})}function p(t,r){t||s(t,!0,r,"==",_.ok)}function m(t,r,e,u){if(t===r)return!0;if(o(t)&&o(r))return 0===n(t,r);if(v.isDate(t)&&v.isDate(r))return t.getTime()===r.getTime();if(v.isRegExp(t)&&v.isRegExp(r))return t.source===r.source&&t.global===r.global&&t.multiline===r.multiline&&t.lastIndex===r.lastIndex&&t.ignoreCase===r.ignoreCase;if(null!==t&&"object"==typeof t||null!==r&&"object"==typeof r){if(a(t)&&a(r)&&i(t)===i(r)&&!(t instanceof Float32Array||t instanceof Float64Array))return 0===n(new Uint8Array(t.buffer),new Uint8Array(r.buffer));if(o(t)!==o(r))return!1;u=u||{actual:[],expected:[]};var c=u.actual.indexOf(t);return-1!==c&&c===u.expected.indexOf(r)||(u.actual.push(t),u.expected.push(r),h(t,r,e,u))}return e?t===r:t==r}function y(t){return"[object Arguments]"==Object.prototype.toString.call(t)}function h(t,r,e,n){if(null===t||void 0===t||null===r||void 0===r)return!1;if(v.isPrimitive(t)||v.isPrimitive(r))return t===r;if(e&&Object.getPrototypeOf(t)!==Object.getPrototypeOf(r))return!1;var o=y(t),i=y(r);if(o&&!i||!o&&i)return!1;if(o)return t=x.call(t),r=x.call(r),m(t,r,e);var a,u,c=A(t),f=A(r);if(c.length!==f.length)return!1;for(c.sort(),f.sort(),u=c.length-1;u>=0;u--)if(c[u]!==f[u])return!1;for(u=c.length-1;u>=0;u--)if(a=c[u],!m(t[a],r[a],e,n))return!1;return!0}function b(t,r,e){m(t,r,!0)&&s(t,r,e,"notDeepStrictEqual",b)}function g(t,r){if(!t||!r)return!1;if("[object RegExp]"==Object.prototype.toString.call(r))return r.test(t);try{if(t instanceof r)return!0}catch(t){}return!Error.isPrototypeOf(r)&&!0===r.call({},t)}function S(t){var r;try{t()}catch(t){r=t}return r}function d(t,r,e,n){var o;if("function"!=typeof r)throw new TypeError('"block" argument must be a function');"string"==typeof e&&(n=e,e=null),o=S(r),n=(e&&e.name?" ("+e.name+").":".")+(n?" "+n:"."),t&&!o&&s(o,e,"Missing expected exception"+n);var i="string"==typeof n,a=!t&&v.isError(o),u=!t&&o&&!e;if((a&&i&&g(o,e)||u)&&s(o,e,"Got unwanted exception"+n),t&&o&&e&&!g(o,e)||!t&&o)throw o}var v=e(32),w=Object.prototype.hasOwnProperty,x=Array.prototype.slice,E=function(){return"foo"===function(){}.name}(),_=t.exports=p,M=/\s*function\s+([^\(\s]*)\s*/;_.AssertionError=function(t){this.name="AssertionError",this.actual=t.actual,this.expected=t.expected,this.operator=t.operator,t.message?(this.message=t.message,this.generatedMessage=!1):(this.message=l(this),this.generatedMessage=!0);var r=t.stackStartFunction||s;if(Error.captureStackTrace)Error.captureStackTrace(this,r);else{var e=new Error;if(e.stack){var n=e.stack,o=u(r),i=n.indexOf("\n"+o);if(i>=0){var a=n.indexOf("\n",i+1);n=n.substring(a+1)}this.stack=n}}},v.inherits(_.AssertionError,Error),_.fail=s,_.ok=p,_.equal=function(t,r,e){t!=r&&s(t,r,e,"==",_.equal)},_.notEqual=function(t,r,e){t==r&&s(t,r,e,"!=",_.notEqual)},_.deepEqual=function(t,r,e){m(t,r,!1)||s(t,r,e,"deepEqual",_.deepEqual)},_.deepStrictEqual=function(t,r,e){m(t,r,!0)||s(t,r,e,"deepStrictEqual",_.deepStrictEqual)},_.notDeepEqual=function(t,r,e){m(t,r,!1)&&s(t,r,e,"notDeepEqual",_.notDeepEqual)},_.notDeepStrictEqual=b,_.strictEqual=function(t,r,e){t!==r&&s(t,r,e,"===",_.strictEqual)},_.notStrictEqual=function(t,r,e){t===r&&s(t,r,e,"!==",_.notStrictEqual)},_.throws=function(t,r,e){d(!0,t,r,e)},_.doesNotThrow=function(t,r,e){d(!1,t,r,e)},_.ifError=function(t){if(t)throw t};var A=Object.keys||function(t){var r=[];for(var e in t)w.call(t,e)&&r.push(e);return r}}).call(r,e(5))},function(t,r,e){"use strict";var n=e(7),o=(e.n(n),"function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t});r.a=function(){if("object"!==o(arguments[0].signal))throw new TypeError;for(var t=0,r=0;r<arguments[0].signal.length;r++)t+=Math.pow(Math.abs(arguments[0].signal[r]),2);return t}},function(t,r,e){"use strict";var n=e(3),o=(e(1),"function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t}),i=e(25);r.a=function(t){if("object"!==o(t.ampSpectrum)||"object"!==o(t.melFilterBank))throw new TypeError;for(var r=e.i(n.a)(t),a=t.melFilterBank.length,u=Array(a),c=new Float32Array(a),f=0;f<c.length;f++){u[f]=new Float32Array(t.bufferSize/2),c[f]=0;for(var l=0;l<t.bufferSize/2;l++)u[f][l]=t.melFilterBank[f][l]*r[l],c[f]+=u[f][l];c[f]=Math.log(c[f]+1)}var s=Array.prototype.slice.call(c);return i(s).slice(0,13)}},function(t,r,e){"use strict";var n=e(2),o="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t};r.a=function(){if("object"!==o(arguments[0].signal))throw new TypeError;for(var t=e.i(n.a)(arguments[0]),r=t.specific,i=0,a=0;a<r.length;a++)i+=a<15?(a+1)*r[a+1]:.066*Math.exp(.171*(a+1));return i*=.11/t.total}},function(t,r,e){"use strict";var n=e(2),o="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t};r.a=function(){if("object"!==o(arguments[0].signal))throw new TypeError;for(var t=e.i(n.a)(arguments[0]),r=0,i=0;i<t.specific.length;i++)t.specific[i]>r&&(r=t.specific[i]);return Math.pow((t.total-r)/t.total,2)}},function(t,r,e){"use strict";var n="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t};r.a=function(t){if("object"!==n(t.signal))throw new TypeError;for(var r=0,e=0;e<t.signal.length;e++)r+=Math.pow(t.signal[e],2);return r/=t.signal.length,r=Math.sqrt(r)}},function(t,r,e){"use strict";var n=e(0),o="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t};r.a=function(){if("object"!==o(arguments[0].ampSpectrum))throw new TypeError;return e.i(n.a)(1,arguments[0].ampSpectrum)}},function(t,r,e){"use strict";var n="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t};r.a=function(){if("object"!==n(arguments[0].ampSpectrum))throw new TypeError;for(var t=0,r=0,e=0;e<arguments[0].ampSpectrum.length;e++)t+=Math.log(arguments[0].ampSpectrum[e]),r+=arguments[0].ampSpectrum[e];return Math.exp(t/arguments[0].ampSpectrum.length)*arguments[0].ampSpectrum.length/r}},function(t,r,e){"use strict";var n="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t};r.a=function(t){if("object"!==n(t.signal)||"object"!=n(t.previousSignal))throw new TypeError;for(var r=0,e=-t.bufferSize/2;e<signal.length/2-1;e++)x=Math.abs(t.signal[e])-Math.abs(t.previousSignal[e]),r+=(x+Math.abs(x))/2;return r}},function(t,r,e){"use strict";var n=e(0),o="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t};r.a=function(){if("object"!==o(arguments[0].ampSpectrum))throw new TypeError;var t=arguments[0].ampSpectrum,r=e.i(n.a)(1,t),i=e.i(n.a)(2,t),a=e.i(n.a)(3,t),u=e.i(n.a)(4,t);return(-3*Math.pow(r,4)+6*r*i-4*r*a+u)/Math.pow(Math.sqrt(i-Math.pow(r,2)),4)}},function(t,r,e){"use strict";var n="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t};r.a=function(){if("object"!==n(arguments[0].ampSpectrum))throw new TypeError;for(var t=arguments[0].ampSpectrum,r=arguments[0].sampleRate/(2*(t.length-1)),e=0,o=0;o<t.length;o++)e+=t[o];for(var i=.99*e,a=t.length-1;e>i&&a>=0;)e-=t[a],--a;return(a+1)*r}},function(t,r,e){"use strict";var n=e(0),o="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t};r.a=function(t){if("object"!==o(t.ampSpectrum))throw new TypeError;var r=e.i(n.a)(1,t.ampSpectrum),i=e.i(n.a)(2,t.ampSpectrum),a=e.i(n.a)(3,t.ampSpectrum);return(2*Math.pow(r,3)-3*r*i+a)/Math.pow(Math.sqrt(i-Math.pow(r,2)),3)}},function(t,r,e){"use strict";var n="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t};r.a=function(t){if("object"!==n(t.ampSpectrum))throw new TypeError;for(var r=0,e=0,o=new Float32Array(t.ampSpectrum.length),i=0,a=0,u=0;u<t.ampSpectrum.length;u++){r+=t.ampSpectrum[u];var c=u*t.sampleRate/t.bufferSize;o[u]=c,i+=c*c,e+=c,a+=c*t.ampSpectrum[u]}return(t.ampSpectrum.length*a-e*r)/(r*(i-Math.pow(e,2)))}},function(t,r,e){"use strict";var n=e(0),o="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t};r.a=function(t){if("object"!==o(t.ampSpectrum))throw new TypeError;return Math.sqrt(e.i(n.a)(2,t.ampSpectrum)-Math.pow(e.i(n.a)(1,t.ampSpectrum),2))}},function(t,r,e){"use strict";var n="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t};r.a=function(){if("object"!==n(arguments[0].signal))throw new TypeError;for(var t=0,r=0;r<arguments[0].signal.length;r++)(arguments[0].signal[r]>=0&&arguments[0].signal[r+1]<0||arguments[0].signal[r]<0&&arguments[0].signal[r+1]>=0)&&t++;return t}},function(t,r,e){t.exports=e(6).default},function(t,r,e){"use strict";function n(t,r){if(!(t instanceof r))throw new TypeError("Cannot call a class as a function")}var o=e(1),i=e(4);e.d(r,"a",function(){return u});var a=function(){function t(t,r){for(var e=0;e<r.length;e++){var n=r[e];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(t,n.key,n)}}return function(r,e,n){return e&&t(r.prototype,e),n&&t(r,n),r}}(),u=function(){function t(r,e){var a=this;if(n(this,t),this._m=e,!r.audioContext)throw this._m.errors.noAC;if(r.bufferSize&&!o.b(r.bufferSize))throw this._m._errors.notPow2;if(!r.source)throw this._m._errors.noSource;this._m.audioContext=r.audioContext,this._m.bufferSize=r.bufferSize||this._m.bufferSize||256,this._m.sampleRate=r.sampleRate||this._m.audioContext.sampleRate||44100,this._m.callback=r.callback,this._m.windowingFunction=r.windowingFunction||"hanning",this._m.featureExtractors=i,this._m.EXTRACTION_STARTED=r.startImmediately||!1,this._m.spn=this._m.audioContext.createScriptProcessor(this._m.bufferSize,1,1),this._m.spn.connect(this._m.audioContext.destination),this._m._featuresToExtract=r.featureExtractors||[],this._m.barkScale=o.c(this._m.bufferSize,this._m.sampleRate,this._m.bufferSize),this._m.melFilterBank=o.d(this._m.melBands,this._m.sampleRate,this._m.bufferSize),this._m.inputData=null,this._m.previousInputData=null,this.setSource(r.source),this._m.spn.onaudioprocess=function(t){null!==a._m.inputData&&(a._m.previousInputData=a._m.inputData),a._m.inputData=t.inputBuffer.getChannelData(0);var r=a._m.extract(a._m._featuresToExtract,a._m.inputData,a._m.previousInputData);"function"==typeof a._m.callback&&a._m.EXTRACTION_STARTED&&a._m.callback(r)}}return a(t,[{key:"start",value:function(t){this._m._featuresToExtract=t||this._m._featuresToExtract,this._m.EXTRACTION_STARTED=!0}},{key:"stop",value:function(){this._m.EXTRACTION_STARTED=!1}},{key:"setSource",value:function(t){t.connect(this._m.spn)}},{key:"get",value:function(t){return this._m.inputData?this._m.extract(t||this._m._featuresToExtract,this._m.inputData,this._m.previousInputData):null}}]),t}()},function(t,r,e){"use strict";function n(t){for(var r=new Float32Array(t),e=2*Math.PI/(t-1),n=2*e,o=0;o<t/2;o++)r[o]=.42-.5*Math.cos(o*e)+.08*Math.cos(o*n);for(var i=t/2;i>0;i--)r[t-i]=r[i-1];return r}function o(t){for(var r=Math.PI/(t-1),e=new Float32Array(t),n=0;n<t;n++)e[n]=Math.sin(r*n);return e}function i(t){for(var r=new Float32Array(t),e=0;e<t;e++)r[e]=.5-.5*Math.cos(2*Math.PI*e/(t-1));return r}function a(t){for(var r=new Float32Array(t),e=0;e<t;e++)r[e]=.54-.46*Math.cos(2*Math.PI*(e/t-1));return r}Object.defineProperty(r,"__esModule",{value:!0}),r.blackman=n,r.sine=o,r.hanning=i,r.hamming=a},function(t,r,e){t.exports=e(26)},function(t,r){function e(t,r){var e=t.length;return r=r||2,cosMap&&cosMap[e]||n(e),t.map(function(){return 0}).map(function(n,o){return r*t.reduce(function(t,r,n,i){return t+r*cosMap[e][n+o*e]},0)})}cosMap=null;var n=function(t){cosMap=cosMap||{},cosMap[t]=new Array(t*t);for(var r=Math.PI/t,e=0;e<t;e++)for(var n=0;n<t;n++)cosMap[t][n+e*t]=Math.cos(r*(n+.5)*e)};t.exports=e},function(t,r,e){"use strict";var n=e(28),o=function(t){var r={};void 0===t.real||void 0===t.imag?r=n.constructComplexArray(t):(r.real=t.real.slice(),r.imag=t.imag.slice());var e=r.real.length,o=Math.log2(e);if(Math.round(o)!=o)throw new Error("Input size must be a power of 2.");if(r.real.length!=r.imag.length)throw new Error("Real and imaginary components must have the same length.");for(var i=n.bitReverseArray(e),a={real:[],imag:[]},u=0;u<e;u++)a.real[i[u]]=r.real[u],a.imag[i[u]]=r.imag[u];for(var c=0;c<e;c++)r.real[c]=a.real[c],r.imag[c]=a.imag[c];for(var f=1;f<=o;f++)for(var l=Math.pow(2,f),s=0;s<l/2;s++)for(var p=n.euler(s,l),m=0;m<e/l;m++){var y=l*m+s,h=l*m+s+l/2,b={real:r.real[y],imag:r.imag[y]},g={real:r.real[h],imag:r.imag[h]},S=n.multiply(p,g),d=n.subtract(b,S);r.real[h]=d.real,r.imag[h]=d.imag;var v=n.add(S,b);r.real[y]=v.real,r.imag[y]=v.imag}return r},i=function(t){if(void 0===t.real||void 0===t.imag)throw new Error("IFFT only accepts a complex input.");for(var r=t.real.length,e={real:[],imag:[]},i=0;i<r;i++){var a={real:t.real[i],imag:t.imag[i]},u=n.conj(a);e.real[i]=u.real,e.imag[i]=u.imag}var c=o(e);return e.real=c.real.map(function(t){return t/r}),e.imag=c.imag.map(function(t){return t/r}),e};t.exports={fft:o,ifft:i}},function(t,r,e){"use strict";function n(t){if(Array.isArray(t)){for(var r=0,e=Array(t.length);r<t.length;r++)e[r]=t[r];return e}return Array.from(t)}var o={},i={},a=function(t){var r={};r.real=void 0===t.real?t.slice():t.real.slice();var e=r.real.length;return void 0===i[e]&&(i[e]=Array.apply(null,Array(e)).map(Number.prototype.valueOf,0)),r.imag=i[e].slice(),r},u=function(t){if(void 0===o[t]){for(var r=(t-1).toString(2).length,e="0".repeat(r),i={},a=0;a<t;a++){var u=a.toString(2);u=e.substr(u.length)+u,u=[].concat(n(u)).reverse().join(""),i[a]=parseInt(u,2)}o[t]=i}return o[t]},c=function(t,r){return{real:t.real*r.real-t.imag*r.imag,imag:t.real*r.imag+t.imag*r.real}},f=function(t,r){return{real:t.real+r.real,imag:t.imag+r.imag}},l=function(t,r){return{real:t.real-r.real,imag:t.imag-r.imag}},s=function(t,r){var e=-2*Math.PI*t/r;return{real:Math.cos(e),imag:Math.sin(e)}},p=function(t){return t.imag*=-1,t};t.exports={bitReverseArray:u,multiply:c,add:f,subtract:l,euler:s,conj:p,constructComplexArray:a}},function(t,r){function e(){throw new Error("setTimeout has not been defined")}function n(){throw new Error("clearTimeout has not been defined")}function o(t){if(l===setTimeout)return setTimeout(t,0);if((l===e||!l)&&setTimeout)return l=setTimeout,setTimeout(t,0);try{return l(t,0)}catch(r){try{return l.call(null,t,0)}catch(r){return l.call(this,t,0)}}}function i(t){if(s===clearTimeout)return clearTimeout(t);if((s===n||!s)&&clearTimeout)return s=clearTimeout,clearTimeout(t);try{return s(t)}catch(r){try{return s.call(null,t)}catch(r){return s.call(this,t)}}}function a(){h&&m&&(h=!1,m.length?y=m.concat(y):b=-1,y.length&&u())}function u(){if(!h){var t=o(a);h=!0;for(var r=y.length;r;){for(m=y,y=[];++b<r;)m&&m[b].run();b=-1,r=y.length}m=null,h=!1,i(t)}}function c(t,r){this.fun=t,this.array=r}function f(){}var l,s,p=t.exports={};!function(){try{l="function"==typeof setTimeout?setTimeout:e}catch(t){l=e}try{s="function"==typeof clearTimeout?clearTimeout:n}catch(t){s=n}}();var m,y=[],h=!1,b=-1;p.nextTick=function(t){var r=new Array(arguments.length-1);if(arguments.length>1)for(var e=1;e<arguments.length;e++)r[e-1]=arguments[e];y.push(new c(t,r)),1!==y.length||h||o(u)},c.prototype.run=function(){this.fun.apply(null,this.array)},p.title="browser",p.browser=!0,p.env={},p.argv=[],p.version="",p.versions={},p.on=f,p.addListener=f,p.once=f,p.off=f,p.removeListener=f,p.removeAllListeners=f,p.emit=f,p.binding=function(t){throw new Error("process.binding is not supported")},p.cwd=function(){return"/"},p.chdir=function(t){throw new Error("process.chdir is not supported")},p.umask=function(){return 0}},function(t,r){"function"==typeof Object.create?t.exports=function(t,r){t.super_=r,t.prototype=Object.create(r.prototype,{constructor:{value:t,enumerable:!1,writable:!0,configurable:!0}})}:t.exports=function(t,r){t.super_=r;var e=function(){};e.prototype=r.prototype,t.prototype=new e,t.prototype.constructor=t}},function(t,r){t.exports=function(t){return t&&"object"==typeof t&&"function"==typeof t.copy&&"function"==typeof t.fill&&"function"==typeof t.readUInt8}},function(t,r,e){(function(t,n){function o(t,e){var n={seen:[],stylize:a};return arguments.length>=3&&(n.depth=arguments[2]),arguments.length>=4&&(n.colors=arguments[3]),h(e)?n.showHidden=e:e&&r._extend(n,e),w(n.showHidden)&&(n.showHidden=!1),w(n.depth)&&(n.depth=2),w(n.colors)&&(n.colors=!1),w(n.customInspect)&&(n.customInspect=!0),n.colors&&(n.stylize=i),c(n,t,n.depth)}function i(t,r){var e=o.styles[r];return e?"["+o.colors[e][0]+"m"+t+"["+o.colors[e][1]+"m":t}function a(t,r){return t}function u(t){var r={};return t.forEach(function(t,e){r[t]=!0}),r}function c(t,e,n){if(t.customInspect&&e&&A(e.inspect)&&e.inspect!==r.inspect&&(!e.constructor||e.constructor.prototype!==e)){var o=e.inspect(n,t);return d(o)||(o=c(t,o,n)),o}var i=f(t,e);if(i)return i;var a=Object.keys(e),h=u(a);if(t.showHidden&&(a=Object.getOwnPropertyNames(e)),M(e)&&(a.indexOf("message")>=0||a.indexOf("description")>=0))return l(e);if(0===a.length){if(A(e)){var b=e.name?": "+e.name:"";return t.stylize("[Function"+b+"]","special")}if(x(e))return t.stylize(RegExp.prototype.toString.call(e),"regexp");if(_(e))return t.stylize(Date.prototype.toString.call(e),"date");if(M(e))return l(e)}var g="",S=!1,v=["{","}"];if(y(e)&&(S=!0,v=["[","]"]),A(e)){g=" [Function"+(e.name?": "+e.name:"")+"]"}if(x(e)&&(g=" "+RegExp.prototype.toString.call(e)),_(e)&&(g=" "+Date.prototype.toUTCString.call(e)),M(e)&&(g=" "+l(e)),0===a.length&&(!S||0==e.length))return v[0]+g+v[1];if(n<0)return x(e)?t.stylize(RegExp.prototype.toString.call(e),"regexp"):t.stylize("[Object]","special");t.seen.push(e);var w;return w=S?s(t,e,n,h,a):a.map(function(r){return p(t,e,n,h,r,S)}),t.seen.pop(),m(w,g,v)}function f(t,r){if(w(r))return t.stylize("undefined","undefined");if(d(r)){var e="'"+JSON.stringify(r).replace(/^"|"$/g,"").replace(/'/g,"\\'").replace(/\\"/g,'"')+"'";return t.stylize(e,"string")}return S(r)?t.stylize(""+r,"number"):h(r)?t.stylize(""+r,"boolean"):b(r)?t.stylize("null","null"):void 0}function l(t){return"["+Error.prototype.toString.call(t)+"]"}function s(t,r,e,n,o){for(var i=[],a=0,u=r.length;a<u;++a)F(r,String(a))?i.push(p(t,r,e,n,String(a),!0)):i.push("");return o.forEach(function(o){o.match(/^\d+$/)||i.push(p(t,r,e,n,o,!0))}),i}function p(t,r,e,n,o,i){var a,u,f;if(f=Object.getOwnPropertyDescriptor(r,o)||{value:r[o]},f.get?u=f.set?t.stylize("[Getter/Setter]","special"):t.stylize("[Getter]","special"):f.set&&(u=t.stylize("[Setter]","special")),F(n,o)||(a="["+o+"]"),u||(t.seen.indexOf(f.value)<0?(u=b(e)?c(t,f.value,null):c(t,f.value,e-1),u.indexOf("\n")>-1&&(u=i?u.split("\n").map(function(t){return"  "+t}).join("\n").substr(2):"\n"+u.split("\n").map(function(t){return"   "+t}).join("\n"))):u=t.stylize("[Circular]","special")),w(a)){if(i&&o.match(/^\d+$/))return u;a=JSON.stringify(""+o),a.match(/^"([a-zA-Z_][a-zA-Z_0-9]*)"$/)?(a=a.substr(1,a.length-2),a=t.stylize(a,"name")):(a=a.replace(/'/g,"\\'").replace(/\\"/g,'"').replace(/(^"|"$)/g,"'"),a=t.stylize(a,"string"))}return a+": "+u}function m(t,r,e){var n=0;return t.reduce(function(t,r){return n++,r.indexOf("\n")>=0&&n++,t+r.replace(/\u001b\[\d\d?m/g,"").length+1},0)>60?e[0]+(""===r?"":r+"\n ")+" "+t.join(",\n  ")+" "+e[1]:e[0]+r+" "+t.join(", ")+" "+e[1]}function y(t){return Array.isArray(t)}function h(t){return"boolean"==typeof t}function b(t){return null===t}function g(t){return null==t}function S(t){return"number"==typeof t}function d(t){return"string"==typeof t}function v(t){return"symbol"==typeof t}function w(t){return void 0===t}function x(t){return E(t)&&"[object RegExp]"===T(t)}function E(t){return"object"==typeof t&&null!==t}function _(t){return E(t)&&"[object Date]"===T(t)}function M(t){return E(t)&&("[object Error]"===T(t)||t instanceof Error)}function A(t){return"function"==typeof t}function j(t){return null===t||"boolean"==typeof t||"number"==typeof t||"string"==typeof t||"symbol"==typeof t||void 0===t}function T(t){return Object.prototype.toString.call(t)}function k(t){return t<10?"0"+t.toString(10):t.toString(10)}function O(){var t=new Date,r=[k(t.getHours()),k(t.getMinutes()),k(t.getSeconds())].join(":");return[t.getDate(),R[t.getMonth()],r].join(" ")}function F(t,r){return Object.prototype.hasOwnProperty.call(t,r)}r.format=function(t){if(!d(t)){for(var r=[],e=0;e<arguments.length;e++)r.push(o(arguments[e]));return r.join(" ")}for(var e=1,n=arguments,i=n.length,a=String(t).replace(/%[sdj%]/g,function(t){if("%%"===t)return"%";if(e>=i)return t;switch(t){case"%s":return String(n[e++]);case"%d":return Number(n[e++]);case"%j":try{return JSON.stringify(n[e++])}catch(t){return"[Circular]"}default:return t}}),u=n[e];e<i;u=n[++e])b(u)||!E(u)?a+=" "+u:a+=" "+o(u);return a},r.deprecate=function(e,o){function i(){if(!a){if(n.throwDeprecation)throw new Error(o);n.traceDeprecation?console.trace(o):console.error(o),a=!0}return e.apply(this,arguments)}if(w(t.process))return function(){return r.deprecate(e,o).apply(this,arguments)};if(!0===n.noDeprecation)return e;var a=!1;return i};var z,D={};r.debuglog=function(t){if(w(z)&&(z=n.env.NODE_DEBUG||""),t=t.toUpperCase(),!D[t])if(new RegExp("\\b"+t+"\\b","i").test(z)){var e=n.pid;D[t]=function(){var n=r.format.apply(r,arguments);console.error("%s %d: %s",t,e,n)}}else D[t]=function(){};return D[t]},r.inspect=o,o.colors={bold:[1,22],italic:[3,23],underline:[4,24],inverse:[7,27],white:[37,39],grey:[90,39],black:[30,39],blue:[34,39],cyan:[36,39],green:[32,39],magenta:[35,39],red:[31,39],yellow:[33,39]},o.styles={special:"cyan",number:"yellow",boolean:"yellow",undefined:"grey",null:"bold",string:"green",date:"magenta",regexp:"red"},r.isArray=y,r.isBoolean=h,r.isNull=b,r.isNullOrUndefined=g,r.isNumber=S,r.isString=d,r.isSymbol=v,r.isUndefined=w,r.isRegExp=x,r.isObject=E,r.isDate=_,r.isError=M,r.isFunction=A,r.isPrimitive=j,r.isBuffer=e(31);var R=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];r.log=function(){console.log("%s - %s",O(),r.format.apply(r,arguments))},r.inherits=e(30),r._extend=function(t,r){if(!r||!E(r))return t;for(var e=Object.keys(r),n=e.length;n--;)t[e[n]]=r[e[n]];return t}}).call(r,e(5),e(29))}])});
 
-},{}]},{},[15]);
+},{}]},{},[14]);
